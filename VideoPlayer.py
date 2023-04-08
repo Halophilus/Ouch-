@@ -6,7 +6,7 @@ class OmxplayerPlayer:
         self.process = None
         self.video_file = None
         self.is_playing = False
-        self.default_image = "/path/to/default/image.jpg"
+        self.default_image = "DEFAULT.png"
     
     def play(self, file_name, loop=False):
         if self.is_playing:
