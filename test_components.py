@@ -27,14 +27,16 @@ rear_fan = PWMOutputDevice(13)
 # Buzzer
 buzzer = PWMLED(6)
 
-# Buttons with internal pull-up resistors and debounce time
-black_button = Button(8, pull_up=True, debounce_time=0.2)
-yellow_button = Button(1, pull_up=True, debounce_time=0.2)
-red_button = Button(7, pull_up=True, debounce_time=0.2)
-key_button = Button(25, pull_up=True, debounce_time=0.2)
+# Buttons with internal pull-up resistors and debounce-like behavior
+black_button = Button(8, pull_up=True, hold_time=0.2, hold_repeat=True)
+yellow_button = Button(1, pull_up=True, hold_time=0.2, hold_repeat=True)
+red_button = Button(7, pull_up=True, hold_time=0.2, hold_repeat=True)
+key_button = Button(25, pull_up=True, hold_time=0.2, hold_repeat=True)
+
 
 # Distance sensor
 distance_sensor = DistanceSensor(echo=20, trigger=21)
+
 try:
     # Test power LED
     print("Testing power LED...")
