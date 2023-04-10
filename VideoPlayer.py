@@ -1,5 +1,6 @@
 import subprocess
 import time
+import threading
 
 
 class OMXPlayerEngine:
@@ -7,6 +8,14 @@ class OMXPlayerEngine:
         self.video_paths = video_paths
         self.current_index = 0
         self.omxplayer_process = None
+        self.loop_video = True
+        self.video_loop_thread = None
+
+    def _loop_video(self):
+        while self.loop_video:
+            if self.omxplayer_process is not None and self.omxplayer_process.poll() is not None:
+                self.play_video(self.current_index)
+            time.sleep(0.5)
 
     def play_video(self, index):
         if self.omxplayer_process is not None and self.omxplayer_process.poll() is None:
@@ -29,6 +38,9 @@ class OMXPlayerEngine:
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
+            if self.video_loop_thread is None:
+                self.video_loop_thread = threading.Thread(target=self._loop_video)
+                self.video_loop_thread.start()
         else:
             print(f"Error: Invalid index {index}. Video not found.")
 
