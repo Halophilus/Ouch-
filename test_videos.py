@@ -40,47 +40,47 @@ player.play_video(0)
 
 key_button.wait_for_press()
 
-player.play_next()
+player.next_video()
 
 sleepForVideoDuration()
 
-player.play_next()
+player.next_video()
 
 black_button.wait_for_press()
 
-player.play_next()
+player.next_video()
 
 black_button.wait_for_release()
 
-player.play_next()
+player.next_video()
 
 sleepForVideoDuration()
 
-player.play_next()
+player.next_video()
 
 yellow_button.wait_for_press()
 
-player.play_next()
+player.next_video()
 
 yellow_button.wait_for_release()
 
-player.play_next()
+player.next_video()
 
 sleepForVideoDuration()
 
-player.play_next()
+player.next_video()
 
 yellow_button.wait_for_press()
 
-player.play_next()
+player.next_video()
 
 yellow_button.wait_for_release()
 
-player.play_next()
+player.next_video()
 
 sleepForVideoDuration()
 
-player.play_next()
+player.next_video()
 key_button.wait_for_release
 player.stop()
 monitor.off()
