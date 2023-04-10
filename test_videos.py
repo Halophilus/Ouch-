@@ -28,11 +28,6 @@ key_button = Button(25, pull_up=True, hold_time=0.2, hold_repeat=True)
 
 player = InteractiveVideoPlayer(video_files)
 
-def sleepForVideoDuration():
-    current_video_path = player.video_files[player.current_video_index]
-    time = get_video_duration(current_video_path)
-    sleep(time)
-
 monitor.on()
 power.on()
 
@@ -42,7 +37,7 @@ key_button.wait_for_press()
 
 player.next_video()
 
-sleepForVideoDuration()
+sleep(15)
 
 player.next_video()
 
@@ -54,7 +49,7 @@ black_button.wait_for_release()
 
 player.next_video()
 
-sleepForVideoDuration()
+sleep(15)
 
 player.next_video()
 
@@ -66,7 +61,7 @@ yellow_button.wait_for_release()
 
 player.next_video()
 
-sleepForVideoDuration()
+sleep(15)
 
 player.next_video()
 
@@ -78,7 +73,7 @@ yellow_button.wait_for_release()
 
 player.next_video()
 
-sleepForVideoDuration()
+sleep(15)
 
 player.next_video()
 key_button.wait_for_release
