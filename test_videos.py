@@ -36,7 +36,7 @@ def sleepForVideoDuration():
 monitor.on()
 power.on()
 
-player.play_video(video_files[0])
+player.play_video(0)
 
 key_button.wait_for_press()
 
