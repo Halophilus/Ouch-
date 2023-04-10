@@ -1,5 +1,5 @@
 from gpiozero import LED, Button
-from VideoPlayer import OMXPlayerEngine
+from VideoPlayer import VLCPlayerEngine
 from time import sleep
 from pathlib import Path
 from videoDuration import get_video_duration
@@ -26,7 +26,7 @@ yellow_button = Button(1, pull_up=True, hold_time=0.2, hold_repeat=True)
 red_button = Button(7, pull_up=True, hold_time=0.2, hold_repeat=True)
 key_button = Button(25, pull_up=True, hold_time=0.2, hold_repeat=True)
 
-player = OMXPlayerEngine(video_files)
+player = VLCPlayerEngine(video_files)
 
 monitor.on()
 power.on()
