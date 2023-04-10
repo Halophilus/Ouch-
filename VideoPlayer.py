@@ -1,51 +1,86 @@
-import subprocess
-import time
+import sys
+import gi
+gi.require_version("Gst", "1.0")
+from gi.repository import Gst, GObject
 
-class OmxplayerPlayer:
-    def __init__(self):
-        self.process = None
-        self.video_file = None
-        self.is_playing = False
-        self.default_image = "DEFAULT.png"
+class InteractiveVideoPlayer:
+    def __init__(self, video_files):
+        self.video_files = video_files
+        self.current_video_index = 0
+
+        Gst.init(None)
+        self.pipeline = Gst.Pipeline.new("interactive-video-player")
+
+        self.source = Gst.ElementFactory.make("filesrc", "file-source")
+        self.decodebin = Gst.ElementFactory.make("decodebin", "decoder")
+        self.audioconvert = Gst.ElementFactory.make("audioconvert", "audio-convert")
+        self.audioresample = Gst.ElementFactory.make("audioresample", "audio-resample")
+        self.audiosink = Gst.ElementFactory.make("alsasink", "audio-output")
+        self.audiosink.set_property("device", "hw:1,0") # Output audio to the 3.5mm jack
+        self.videoconvert = Gst.ElementFactory.make("videoconvert", "video-convert")
+        self.videosink = Gst.ElementFactory.make("autovideosink", "video-output")
+
+        self.pipeline.add(self.source)
+        self.pipeline.add(self.decodebin)
+        self.pipeline.add(self.audioconvert)
+        self.pipeline.add(self.audioresample)
+        self.pipeline.add(self.audiosink)
+        self.pipeline.add(self.videoconvert)
+        self.pipeline.add(self.videosink)
+
+        self.source.link(self.decodebin)
+        self.audioconvert.link(self.audioresample)
+        self.audioresample.link(self.audiosink)
+        self.videoconvert.link(self.videosink)
+
+        self.decodebin.connect("pad-added", self.on_pad_added)
+
+        bus = self.pipeline.get_bus()
+        bus.add_signal_watch()
+        bus.connect("message", self.on_bus_call)
     
-    def play(self, file_name, loop=False):
-        if self.is_playing:
+    def reset_sequence(self):
+        self.current_video_index = 0
+
+    def on_pad_added(self, element, pad):
+        pad_type = pad.query_caps(None).to_string()
+        if pad_type.startswith("audio"):
+            pad.link(self.audioconvert.get_static_pad("sink"))
+        elif pad_type.startswith("video"):
+            pad.link(self.videoconvert.get_static_pad("sink"))
+
+    def on_bus_call(self, bus, message):
+        t = message.type
+        if t == Gst.MessageType.EOS:
+            self.play_next()
+        elif t == Gst.MessageType.ERROR:
+            err, debug = message.parse_error()
+            print("Error: %s" % err, debug)
             self.stop()
-        self.video_file = file_name
-        loop_flag = "--loop" if loop else ""
-        cmd = f"omxplayer -b --no-osd --aspect-mode stretch --adev alsa -o hdmi,alsa {loop_flag} './{file_name}'"
-        self.process = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE)
-        self.is_playing = True
+        return True
+
+    def play_next(self):
+        self.current_video_index += 1
+        if self.current_video_index >= len(self.video_files):
+            self.current_video_index = 0
+        self.play_video(self.video_files[self.current_video_index])
+
+    def play_video(self, video_path):
+        self.pipeline.set_state(Gst.State.NULL)
+        self.source.set_property("location", video_path)
+        self.pipeline.set_state(Gst.State.PLAYING)
 
     def stop(self):
-        if self.is_playing:
-            self.process.stdin.write(b'q')
-            self.process.stdin.flush()
-            self.process.wait()
-            self.is_playing = False
-            self.video_file = None
-            self.show_default_image()
-    
-    def get_time_remaining(self):
-        if self.is_playing:
-            cmd = ' '.join(['bash', '-c', f'echo "{chr(27)}[0;50;24M" | dd bs=1 count=4 2>/dev/null ; cat /proc/{self.process.pid}/stat | cut -d" " -f15'])
-            time_remaining_ms = int(subprocess.check_output(cmd, shell=True))
-            return time_remaining_ms / 1000
-        return None
-    
-    def show_default_image(self):
-        cmd = f"fbi -d /dev/fb0 -noverbose -a '{self.default_image}'"
-        subprocess.call(cmd, shell=True)
-        self.is_playing = False
-    
-    def set_default_image(self, image_path):
-        self.default_image = image_path
-        if not self.is_playing:
-            self.show_default_image()
+        self.pipeline.set_state(Gst.State.NULL)
+        self.reset_sequence()
 
 if __name__ == "__main__":
-    player = OmxplayerPlayer()
-    player.show_default_image()  # Show the default image at the beginning
-    player.play("example.mp4", loop=True)
-    time.sleep(10) # Wait for 10 seconds before stopping the player
-    player.stop()
+    video_files = ["video1.mp4", "video2.mp4", "video3.mp4"]
+    ivp = InteractiveVideoPlayer(video_files)
+    ivp.play_video(video_files[0])
+
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        ivp.stop()
