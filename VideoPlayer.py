@@ -4,6 +4,7 @@ import threading
 
 class VLCSectionLooper:
     def __init__(self, video_sections, master_video):
+        print("VLCSectionLooper initialized")
         self.video_sections = video_sections
         self.master_video = master_video
         self.current_index = 0
@@ -38,6 +39,8 @@ class VLCSectionLooper:
 
     def _play_video_section(self, index):
         start_time, end_time = self._get_video_start_end(index)
+        print(f"Playing section: {self.video_sections[index][0]}, start: {start_time}s, end: {end_time}s")
+        print(f"Command: {self._playback_command}")
         while not self._stop_playback_thread.is_set():
             self._vlc_process.stdin.write(f"seek {start_time}\n".encode())
             self._vlc_process.stdin.flush()
