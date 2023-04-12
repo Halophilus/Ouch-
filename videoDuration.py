@@ -23,7 +23,7 @@ def get_video_duration(file_path):
         return None
 
 if __name__ == "__main__":
-    video_file = "path/to/your/video.mp4"
+    video_file = "C:\\Users\\Thomas.Henshaw001\\Development\\Ouch!\\VideoMaker\\Videos\\BOOT.mp4"
     duration = get_video_duration(video_file)
     if duration:
         print(f"Video duration: {duration} seconds")

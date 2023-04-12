@@ -1,24 +1,24 @@
 from gpiozero import LED, Button
-from VideoPlayer import VLCPlayerEngine
+from VideoPlayer import VLCSectionLooper
 from time import sleep
 from pathlib import Path
 from videoDuration import get_video_duration
 
-video_files = ["/home/pi/Ouch-/STARTUP_LOOP.mp4",
-               "/home/pi/Ouch-/Main Sequence/1.mp4",
-               "/home/pi/Ouch-/Transitions/1.mp4",
-               "/home/pi/Ouch-/Button Press/BLACK.mp4",
-               "/home/pi/Ouch-/Main Sequence/2.mp4",
-               "/home/pi/Ouch-/Transitions/2.mp4",
-               "/home/pi/Ouch-/Button Press/YELLOW.mp4",
-               "/home/pi/Ouch-/Main Sequence/3.mp4",
-               "/home/pi/Ouch-/Transitions/3.mp4",
-               "/home/pi/Ouch-/Button Press/RED.mp4",
-               "/home/pi/Ouch-/CREDITS.mp4",
-               "/home/pi/Ouch-/SHUTDOWN_SCREEN.MP4",
-               "/home/pi/Ouch-/SHUTDOWN.MP4"
+video_files = [("Startup", 5),
+               ("Main Sequence 1",10), 
+               ("Transition 1",2),
+               ("Black Button", 3),
+               ("Main Sequence 2",10),
+               ("Transition 2",2),
+               ("Yellow Button",3),
+               ("Main Sequence 3",10),
+               ("Transition 3", 2)
+               ("Red Button", 3)
+               ("Credits", 4)
+               ("Shutdown Screen", 4)
+               ("Shutdown", 5)
                ]
-
+master_video = "/home/pi/Ouch-/master.mp4"
 monitor = LED(15)
 power = LED(14)
 black_button = Button(8, pull_up=True, hold_time=0.2, hold_repeat=True)
@@ -26,7 +26,7 @@ yellow_button = Button(1, pull_up=True, hold_time=0.2, hold_repeat=True)
 red_button = Button(7, pull_up=True, hold_time=0.2, hold_repeat=True)
 key_button = Button(25, pull_up=True, hold_time=0.2, hold_repeat=True)
 
-player = VLCPlayerEngine(video_files)
+player = VLCSectionLooper(video_files, master_video)
 
 monitor.on()
 power.on()
