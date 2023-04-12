@@ -12,10 +12,10 @@ video_files = [("Startup", 5),
                ("Transition 2",2),
                ("Yellow Button",3),
                ("Main Sequence 3",10),
-               ("Transition 3", 2)
-               ("Red Button", 3)
-               ("Credits", 4)
-               ("Shutdown Screen", 4)
+               ("Transition 3", 2),
+               ("Red Button", 3),
+               ("Credits", 4),
+               ("Shutdown Screen", 4),
                ("Shutdown", 5)
                ]
 master_video = "/home/pi/Ouch-/master.mp4"
