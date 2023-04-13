@@ -90,3 +90,92 @@ class VLCVideoPlayer:
     def stop(self):
         # Stop the current section loop if it's running
         self.stop_loop = True
+import time
+import threading
+from omxplayer import OMXPlayer
+
+class VLCVideoPlayer:
+    def __init__(self, video_list=[], file_path=None):
+        self.player = None
+        self.video_list = video_list
+        self.section_dict = None
+        self.section_index_list = None
+        self.stop_loop = False
+        self.current_thread = None
+        self.stop_loop_event = threading.Event()
+
+        if self.video_list is not None:
+            self.section_dict = self._create_section_dictionary(self.video_list)
+            self.section_index_list = self._create_section_index_list(self.video_list)
+
+        if file_path is not None:
+            self._play_video(file_path)
+
+    def _create_section_dictionary(self, sections):
+        tracking_point = 0.0
+        section_dict = {}
+
+        for section in sections:
+            section_name, duration = section
+            section_dict[section_name] = (tracking_point, tracking_point + duration)
+            tracking_point += duration
+
+        return section_dict
+
+    def _play_video(self, file_path):
+        self.player = OMXPlayer(file_path, args=['--no-osd', '--loop'])
+        first_video = self.section_index_list[0]
+        first_video = self.section_dict[first_video]
+        self.play_section(first_video)
+
+    def _play_video_from_time_point(self, time_point):
+        if self.player is None:
+            print("No video!")
+            return
+        self.player.set_position(time_point)
+
+    def play_section(self, section_name):
+        if section_name not in self.section_dict:
+            print("Section not found!")
+            return
+
+        self.stop_loop = True
+        self.stop_loop_event.wait()
+
+        if self.current_thread is not None:
+            self.current_thread.join()
+
+        self.stop_loop = False
+        self.stop_loop_event.clear()
+
+        def _section_loop():
+            start_time, end_time = self.section_dict[section_name]
+            duration_in_tenths = (end_time - start_time) * 10.0
+            while not self.stop_loop:
+                self._play_video_from_time_point(start_time)
+                for _ in range(int(duration_in_tenths)):
+                    if self.stop_loop:
+                        return
+                    time.sleep(0.1)
+
+            self.stop_loop_event.set()
+
+        self.current_thread = threading.Thread(target=_section_loop)
+        self.current_thread.start()
+
+    def _create_section_index_list(self, sections):
+        section_index_list = [section_name for section_name, _ in sections]
+        return section_index_list
+
+    def stop(self):
+        self.stop_loop = True
+        self.stop_loop_event.wait()
+
+        if self.current_thread is not None:
+            self.current_thread.join()
+
+        self.stop_loop = False
+        self.stop_loop_event.clear()
+
+        if self.player is not None:
+            self.player.stop()
