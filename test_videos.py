@@ -31,52 +31,54 @@ player = VLCVideoPlayer(video_files, master_video)
 monitor.on()
 power.on()
 
-player.play_video('Startup')
+player.play_section('Startup')
 
 key_button.wait_for_press()
 
-player.next_video()
+player.play_section('Main Sequence 1')
 
-sleep(15)
+sleep(10)
 
-player.next_video()
+player.play_section('Transition 1')
 
 black_button.wait_for_press()
 
-player.next_video()
+player.play_section('Black Button')
 
 black_button.wait_for_release()
 
-player.next_video()
+player.play_section('Main Sequence 2')
 
-sleep(15)
+sleep(10)
 
-player.next_video()
-
-yellow_button.wait_for_press()
-
-player.next_video()
-
-yellow_button.wait_for_release()
-
-player.next_video()
-
-sleep(15)
-
-player.next_video()
+player.play_section('Transition 2')
 
 yellow_button.wait_for_press()
 
-player.next_video()
+player.play_section('Yellow Button')
 
 yellow_button.wait_for_release()
 
-player.next_video()
+player.play_section('Main Sequence 3')
 
-sleep(15)
+sleep(10)
 
-player.next_video()
+player.play_section('Transition 3')
+
+yellow_button.wait_for_press()
+
+player.play_section('Red Button')
+
+yellow_button.wait_for_release()
+
+player.play_section('Credits')
+
+sleep(3.920)
+
+player.play_video('Shutdown Screen')
+
 key_button.wait_for_release
+
 player.stop()
 monitor.off()
 power.off()

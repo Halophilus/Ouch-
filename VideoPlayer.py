@@ -16,10 +16,10 @@ class VLCVideoPlayer:
             self._play_video(file_path)
         
         if self.video_list is not None:
-            self.section_dict = self.create_section_dictionary(self.video_list)
-            self.section_index_list = self.create_section_index_list(self.video_list)
+            self.section_dict = self._create_section_dictionary(self.video_list)
+            self.section_index_list = self._create_section_index_list(self.video_list)
     
-    def create_section_dictionary(sections):
+    def _create_section_dictionary(sections):
         tracking_point = 0.0
         section_dict = {}
 
@@ -67,7 +67,7 @@ class VLCVideoPlayer:
         self.stop_loop = False
         self.stop_loop_event.clear()
 
-        def section_loop():
+        def _section_loop():
             start_time, end_time = self.section_dict[section_name]
             duration_in_tenths = (end_time - start_time) * 10.0
             while not self.stop_loop:
@@ -80,10 +80,10 @@ class VLCVideoPlayer:
             self.stop_loop_event.set()  # Signal that the section_loop has stopped
 
         # Start the loop in a background thread
-        self.current_thread = threading.Thread(target=section_loop)
+        self.current_thread = threading.Thread(target=_section_loop)
         self.current_thread.start()
 
-    def create_section_index_list(self, sections):
+    def _create_section_index_list(self, sections):
         section_index_list = [section_name for section_name, _ in sections]
         return section_index_list
 
