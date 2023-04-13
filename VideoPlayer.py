@@ -3,7 +3,7 @@ import time
 import threading
 
 class VLCVideoPlayer:
-    def __init__(self, video_list=[],file_path=None):
+    def __init__(self, video_list=[], file_path=None):
         self.player = None
         self.video_list = video_list
         self.section_dict = None
@@ -12,12 +12,12 @@ class VLCVideoPlayer:
         self.current_thread = None
         self.stop_loop_event = threading.Event()
 
-        if file_path is not None:
-            self._play_video(file_path)
-        
         if self.video_list is not None:
             self.section_dict = self._create_section_dictionary(self.video_list)
             self.section_index_list = self._create_section_index_list(self.video_list)
+
+        if file_path is not None:
+            self._play_video(file_path)
     
     def _create_section_dictionary(sections):
         tracking_point = 0.0
