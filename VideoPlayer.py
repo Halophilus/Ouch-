@@ -67,15 +67,21 @@ class VLCVideoPlayer:
         self.stop_loop = False
         self.stop_loop_event.clear()
 
-        def _section_loop():
-            start_time, end_time = self.section_dict[section_name]
+        def _section_loop(self):
+            start_time, end_time = self.section_dict[self.current_section]
             duration_in_tenths = (end_time - start_time) * 10.0
+            start_time_secs = start_time
+
             while not self.stop_loop:
-                self._play_video_from_time_point(start_time)
-                for _ in range(duration_in_tenths):
+                self._play_video_from_time_point(start_time_secs)
+                for _ in range(int(duration_in_tenths)):
                     if self.stop_loop:
                         return
                     time.sleep(0.1)
+                    start_time_secs += 0.1
+                    if start_time_secs >= end_time:
+                        start_time_secs = start_time
+
 
             self.stop_loop_event.set()  # Signal that the section_loop has stopped
 
