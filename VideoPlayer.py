@@ -1,99 +1,105 @@
-import subprocess
+import vlc
 import time
 import threading
 
-class VLCSectionLooper:
-    def __init__(self, video_sections, master_video):
-        print("VLCSectionLooper initialized")
-        self.video_sections = video_sections
-        self.master_video = master_video
-        self.current_index = 0
-        self._vlc_process = None
-        self._playback_thread = None
-        self._stop_playback_thread = threading.Event()
+class VLCVideoPlayer:
+    def __init__(self, video_list=[],file_path=None):
+        self.player = None
+        self.video_list = video_list
+        self.section_dict = None
+        self.section_index_list = None
+        self.stop_loop = False
+        self.current_thread = None
+        self.stop_loop_event = threading.Event()
 
-        self._vlc_process = subprocess.Popen(
-            [
-                "cvlc",
-                "--no-osd",
-                "--no-xlib",
-                "--fullscreen",
-                "--no-video-title-show",
-                "--aout=alsa",
-                "--alsa-audio-device=hw:1,0",
-                "--loop",
-                self.master_video
-            ],
-            stdin=subprocess.PIPE,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
-        )
+        if file_path is not None:
+            self._play_video(file_path)
+        
+        if self.video_list is not None:
+            self.section_dict = self.create_section_dictionary(self.video_list)
+            self.section_index_list = self.create_section_index_list(self.video_list)
+    
+    def create_section_dictionary(sections):
+        tracking_point = 0.0
+        section_dict = {}
 
-        time.sleep(2)  # Allow some time for VLC to start
-        self.play_video(self.current_index)
+        for section in sections:
+            section_name, duration = section
+            section_dict[section_name] = (tracking_point, tracking_point + duration)
+            tracking_point += duration
 
-    def _get_video_start_end(self, index):
-        start_time = sum(video[1] for video in self.video_sections[:index])
-        end_time = start_time + self.video_sections[index][1]
-        return start_time, end_time
+        return section_dict
 
-    def _play_video_section(self, index):
-        start_time, end_time = self._get_video_start_end(index)
-        print(f"Playing section: {self.video_sections[index][0]}, start: {start_time}s, end: {end_time}s")
-        while not self._stop_playback_thread.is_set():
-            self._vlc_process.stdin.write(f"seek {start_time}\n".encode())
-            self._vlc_process.stdin.flush()
-            time.sleep(self.video_sections[index][1])
+    def _play_video(self, file_path):
+        instance = vlc.Instance("--no-xlib --no-osd --fullscreen --no-video-title-show")
+        self.player = instance.media_player_new()
+        media = instance.media_new(file_path)
+        self.player.set_media(media)
+        self.player.audio_output_set("analog")
+        self.player.play()
+        first_video = self.section_index_list[0]
+        first_video = self.section_dict[first_video]
+        self.play_section(first_video)
 
-    def play_video(self, index):
-        if 0 <= index < len(self.video_sections):
-            self.current_index = index
-            self._stop_playback_thread.set()
-
-            if self._playback_thread is not None:
-                self._playback_thread.join()
-
-            self._stop_playback_thread.clear()
-            self._playback_thread = threading.Thread(target=self._play_video_section, args=(self.current_index,))
-            self._playback_thread.start()
+    def _play_video_from_time_point(self, time_point):
+        if self.player is None:
+            print("No video!")
+            return
+        if self.player.get_state() in [vlc.State.Playing, vlc.State.Paused]:
+            # Convert time_point to milliseconds and set the player's time
+            self.player.set_time(int(time_point * 1000))
         else:
-            print(f"Error: Invalid index {index}. Video not found.")
+            print("Out of range!")
 
-    def next_video(self):
-        self.current_index += 1
-        if self.current_index >= len(self.video_sections):
-            self.current_index = 0
-        self.play_video(self.current_index)
+    def play_section(self, section_name):
+        if section_name not in self.section_dict:
+            print("Section not found!")
+            return
 
-    def reset_sequence(self):
-        self.current_index = 0
+        # Stop the current loop
+        self.stop_loop = True
+        self.stop_loop_event.wait()  # Wait for the section_loop to signal that it has stopped
 
-    def get_current_video(self):
-        return self.video_sections[self.current_index][0]
+        if self.current_thread is not None:
+            self.current_thread.join()
+
+        # Reset the stop_loop flag and the stop_loop_event
+        self.stop_loop = False
+        self.stop_loop_event.clear()
+
+        def section_loop():
+            start_time, end_time = self.section_dict[section_name]
+            duration_in_tenths = (end_time - start_time) * 10.0
+            while not self.stop_loop:
+                self._play_video_from_time_point(start_time)
+                for _ in range(duration_in_tenths):
+                    if self.stop_loop:
+                        return
+                    time.sleep(0.1)
+
+            self.stop_loop_event.set()  # Signal that the section_loop has stopped
+
+        # Start the loop in a background thread
+        self.current_thread = threading.Thread(target=section_loop)
+        self.current_thread.start()
+
+    def create_section_index_list(self, sections):
+        section_index_list = [section_name for section_name, _ in sections]
+        return section_index_list
 
     def stop(self):
-        self._stop_playback_thread.set()
-        if self._playback_thread is not None:
-            self._playback_thread.join()
-        if self._vlc_process is not None:
-            self._vlc_process.stdin.write(b"quit\n")
-            self._vlc_process.stdin.flush()
-            self._vlc_process.wait()
+        # Stop the current section loop if it's running
+        self.stop_loop = True
+        self.stop_loop_event.wait()
 
-video_sections = [("Section 1", 10), ("Section 2", 12), ("Section 3", 15)]
-master_video = "concatenated_video.mp4"
-video_player = VLCSectionLooper(video_sections, master_video)
+        if self.current_thread is not None:
+            self.current_thread.join()
 
-time.sleep(10)
-video_player.play_video(1)
-print("Currently playing:", video_player.get_current_video())
-time.sleep(10)
+        # Reset the stop_loop flag and the stop_loop_event
+        self.stop_loop = False
+        self.stop_loop_event.clear()
 
-video_player.next_video()
-time.sleep(10)
-
-video_player.reset_sequence()
-video_player.play_video(0)
-time.sleep(10)
-
-video_player.stop()
+        # Pause the video and set its position to the very beginning
+        if self.player is not None:
+            self.player.pause()
+            self.player.set_time(0)
