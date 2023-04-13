@@ -18,7 +18,7 @@ class VLCVideoPlayer:
 
         if file_path is not None:
             self._play_video(file_path)
-    
+
     def _create_section_dictionary(self, sections):
         tracking_point = 0.0
         section_dict = {}
@@ -35,8 +35,8 @@ class VLCVideoPlayer:
         self.player = instance.media_player_new()
         media = instance.media_new(file_path)
         self.player.set_media(media)
-        self.player.audio_output_set("analog")
         self.player.play()
+        time.sleep(1)  # Give the player some time to start playing the video
         first_video = self.section_index_list[0]
         first_video = self.section_dict[first_video]
         self.play_section(first_video)
@@ -67,21 +67,15 @@ class VLCVideoPlayer:
         self.stop_loop = False
         self.stop_loop_event.clear()
 
-        def _section_loop(self):
-            start_time, end_time = self.section_dict[self.current_section]
+        def _section_loop():
+            start_time, end_time = self.section_dict[section_name]
             duration_in_tenths = (end_time - start_time) * 10.0
-            start_time_secs = start_time
-
             while not self.stop_loop:
-                self._play_video_from_time_point(start_time_secs)
+                self._play_video_from_time_point(start_time)
                 for _ in range(int(duration_in_tenths)):
                     if self.stop_loop:
                         return
                     time.sleep(0.1)
-                    start_time_secs += 0.1
-                    if start_time_secs >= end_time:
-                        start_time_secs = start_time
-
 
             self.stop_loop_event.set()  # Signal that the section_loop has stopped
 
@@ -96,16 +90,3 @@ class VLCVideoPlayer:
     def stop(self):
         # Stop the current section loop if it's running
         self.stop_loop = True
-        self.stop_loop_event.wait()
-
-        if self.current_thread is not None:
-            self.current_thread.join()
-
-        # Reset the stop_loop flag and the stop_loop_event
-        self.stop_loop = False
-        self.stop_loop_event.clear()
-
-        # Pause the video and set its position to the very beginning
-        if self.player is not None:
-            self.player.pause()
-            self.player.set_time(0)
