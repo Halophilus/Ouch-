@@ -4,6 +4,9 @@ import threading
 
 class VLCLooper:
     def __init__(self, *, media, start_time, end_time):
+        print("AVAILABLE METHODS ON MEDIA")
+        print(dir(media))
+
         self._media = media
         self._start_time = start_time
         self._end_time = end_time
@@ -60,7 +63,7 @@ class VLCVideoPlayer:
         return section_dict
 
     def play_video(self, file_path):
-        instance = vlc.Instance("--no-xlib", "--no-osd", "--fullscreen", "--no-video-title-show", "--vout=mmal_vout")
+        instance = vlc.Instance("--no-xlib", "--no-osd", "--no-video-title-show", "--vout=mmal_vout")
         self.player = instance.media_player_new()
         media = instance.media_new(file_path)
         self.player.set_media(media)
