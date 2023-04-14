@@ -25,14 +25,16 @@ yellow_button = Button(1, pull_up=True, hold_time=0.2, hold_repeat=True)
 red_button = Button(7, pull_up=True, hold_time=0.2, hold_repeat=True)
 key_button = Button(25, pull_up=True, hold_time=0.2, hold_repeat=True)
 
-player = VLCVideoPlayer(video_files, master_video)
-
-print(player)
-time.sleep(100000)
 monitor = LED(15)
 power = LED(14)
 monitor.on()
 power.on()
+
+player = VLCVideoPlayer(video_files, master_video)
+
+print(player)
+time.sleep(100000)
+
 
 player.play_section('Startup')
 
