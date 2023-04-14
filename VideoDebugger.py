@@ -67,7 +67,7 @@ class VideoPlayer:
             self.player = None
 
 # Usage example
-video_path = "/path/to/your/video/file.mp4"
+video_path = "/home/pi/Ouch-/master.mp4"
 player = VideoPlayer(video_path)
 
 # Play the video
