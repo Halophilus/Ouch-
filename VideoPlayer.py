@@ -12,12 +12,12 @@ class VLCVideoPlayer:
         self.current_thread = None
         self.stop_loop_event = threading.Event()
 
-        if file_path is not None:
-            self.play_video(file_path)
-        
         if self.video_list is not None:
             self.section_dict = self.create_section_dictionary(self.video_list)
             self.section_index_list = self.create_section_index_list(self.video_list)
+
+        if file_path is not None:
+            self.play_video(file_path)
     
     def create_section_dictionary(sections):
         tracking_point = 0.0
