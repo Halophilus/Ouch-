@@ -34,3 +34,54 @@ time.sleep(10)
 
 # Stop the video
 player.stop()
+import os
+import subprocess
+import time
+
+class VideoPlayer:
+    def __init__(self, video_path):
+        self.video_path = video_path
+        self.player = None
+
+    def play(self):
+        self.player = subprocess.Popen(['omxplayer', '--no-osd', self.video_path],
+                                       stdin=subprocess.PIPE,
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE,
+                                       text=True)
+
+    def jump_to_timestamp(self, timestamp):
+        if self.player is None:
+            print("Please start the video using the play() method before using jump_to_timestamp.")
+            return
+
+        jump_cmd = f"{timestamp}\n"
+        self.player.stdin.write(jump_cmd)
+        self.player.stdin.flush()
+
+    def stop(self):
+        if self.player is not None:
+            self.player.stdin.write('q\n')
+            self.player.stdin.flush()
+            self.player.wait()
+            self.player = None
+
+# Usage example
+video_path = "/path/to/your/video/file.mp4"
+player = VideoPlayer(video_path)
+
+# Play the video
+player.play()
+time.sleep(5)
+
+# Jump to a specific timestamp (in seconds)
+player.jump_to_timestamp(30)
+time.sleep(5)
+player.jump_to_timestamp(30)
+time.sleep(5)
+player.jump_to_timestamp(45)
+time.sleep(5)
+player.jump_to_timestamp(30)
+time.sleep(5)
+# Stop the video playback
+player.stop()
