@@ -33,7 +33,6 @@ power.on()
 player = VLCVideoPlayer(video_files, master_video)
 
 print(player)
-time.sleep(100000)
 
 
 player.play_section('Startup')
