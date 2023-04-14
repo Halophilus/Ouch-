@@ -2,7 +2,8 @@ import vlc
 import time
 
 # Initialize VLC instance
-instance = vlc.Instance()
+instance = vlc.Instance("--no-xlib", "--vout=mmal_vout")
+
 
 # Create a media player object
 player = instance.media_player_new()
