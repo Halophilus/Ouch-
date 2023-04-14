@@ -66,7 +66,7 @@ class VLCVideoPlayer:
     def play_video(self, file_path):
         # "--no-video-title-show",
         # "--no-osd",
-        instance = vlc.Instance("--no-xlib",  "--no-video-title-show", "--fullscreen", "--no-osd" "--vout=mmal_vout")
+        instance = vlc.Instance("--no-xlib",  "--no-video-title-show", "--fullscreen", "--no-osd", "--vout=mmal_vout")
         self.player = instance.media_player_new()
         media = instance.media_new(file_path)
         self.player.set_media(media)
