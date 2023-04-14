@@ -60,7 +60,7 @@ class VLCVideoPlayer:
         return section_dict
 
     def play_video(self, file_path):
-        instance = vlc.Instance("--no-xlib --no-osd --fullscreen --no-video-title-show")
+        instance = vlc.Instance("--no-xlib", "--no-osd", "--fullscreen", "--no-video-title-show", "--vout=mmal_vout")
         self.player = instance.media_player_new()
         media = instance.media_new(file_path)
         self.player.set_media(media)
