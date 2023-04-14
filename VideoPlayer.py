@@ -25,8 +25,8 @@ class VLCLooper:
         self._media.set_time(self._start_time)
         while not self._kill:
             print("SETTING TIME")
-            print("GOT TIME: " + self._media.get_time())
-            print("END TIME: " + self._end_time)
+            print(f"GOT TIME: {self._media.get_time()}" )
+            print("END TIME: {self._end_time}")
             if self._media.get_time() >= self._end_time:
                 self._media.set_time(self._start_time)
             time.sleep(0.1)
@@ -71,7 +71,7 @@ class VLCVideoPlayer:
         self.player.set_media(media)
         self.player.audio_output_set("analog")
         self.player.play()
-        self.looper = VLCLooper(media_player=self.player, start_time = 0, end_time=3)
+        self.looper = VLCLooper(media_player=self.player, start_time = 0, end_time=4000)
         self.looper.start()
         time.sleep(10000)
         #first_video = self.section_index_list[0]
