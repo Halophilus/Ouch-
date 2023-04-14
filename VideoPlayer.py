@@ -3,11 +3,11 @@ import time
 import threading
 
 class VLCLooper:
-    def __init__(self, *, media, start_time, end_time):
-        print("AVAILABLE METHODS ON MEDIA")
-        print(dir(media))
+    def __init__(self, *, media_player, start_time, end_time):
+        print("AVAILABLE METHODS ON MEDIA PLAYER")
+        print(dir(media_player))
 
-        self._media = media
+        self._media = media_player
         self._start_time = start_time
         self._end_time = end_time
         self._kill = False
@@ -69,7 +69,7 @@ class VLCVideoPlayer:
         self.player.set_media(media)
         self.player.audio_output_set("analog")
         self.player.play()
-        self.looper = VLCLooper(media=media, start_time = 0, end_time=3)
+        self.looper = VLCLooper(media_player=self.player, start_time = 0, end_time=3)
         self.looper.start()
         time.sleep(10000)
         #first_video = self.section_index_list[0]
