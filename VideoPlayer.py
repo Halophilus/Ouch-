@@ -3,7 +3,7 @@ import time
 import threading
 
 class VLCVideoPlayer:
-    def __init__(self, video_list=[], file_path=None):
+    def __init__(self, video_list=[],file_path=None):
         self.player = None
         self.video_list = video_list
         self.section_dict = None
@@ -12,14 +12,14 @@ class VLCVideoPlayer:
         self.current_thread = None
         self.stop_loop_event = threading.Event()
 
-        if self.video_list is not None:
-            self.section_dict = self._create_section_dictionary(self.video_list)
-            self.section_index_list = self._create_section_index_list(self.video_list)
-
         if file_path is not None:
-            self._play_video(file_path)
+            self.play_video(file_path)
+        
+        if self.video_list is not None:
+            self.section_dict = self.create_section_dictionary(self.video_list)
+            self.section_index_list = self.create_section_index_list(self.video_list)
     
-    def _create_section_dictionary(self, sections):
+    def create_section_dictionary(sections):
         tracking_point = 0.0
         section_dict = {}
 
@@ -30,19 +30,18 @@ class VLCVideoPlayer:
 
         return section_dict
 
-    def _play_video(self, file_path):
-        instance = vlc.Instance("--no-xlib", "--no-osd", "--fullscreen", "--no-video-title-show", "--vout=mmal_vout")
+    def play_video(self, file_path):
+        instance = vlc.Instance("--no-xlib --no-osd --fullscreen --no-video-title-show")
         self.player = instance.media_player_new()
         media = instance.media_new(file_path)
         self.player.set_media(media)
-        self.player.set_fullscreen(True)
         self.player.audio_output_set("analog")
         self.player.play()
         first_video = self.section_index_list[0]
         first_video = self.section_dict[first_video]
         self.play_section(first_video)
 
-    def _play_video_from_time_point(self, time_point):
+    def play_video_from_time_point(self, time_point):
         if self.player is None:
             print("No video!")
             return
@@ -68,29 +67,23 @@ class VLCVideoPlayer:
         self.stop_loop = False
         self.stop_loop_event.clear()
 
-        def _section_loop(self):
-            start_time, end_time = self.section_dict[self.current_section]
+        def section_loop():
+            start_time, end_time = self.section_dict[section_name]
             duration_in_tenths = (end_time - start_time) * 10.0
-            start_time_secs = start_time
-
             while not self.stop_loop:
-                self._play_video_from_time_point(start_time_secs)
-                for _ in range(int(duration_in_tenths)):
+                self.play_video_from_time_point(start_time)
+                for _ in range(duration_in_tenths):
                     if self.stop_loop:
                         return
                     time.sleep(0.1)
-                    start_time_secs += 0.1
-                    if start_time_secs >= end_time:
-                        start_time_secs = start_time
-
 
             self.stop_loop_event.set()  # Signal that the section_loop has stopped
 
         # Start the loop in a background thread
-        self.current_thread = threading.Thread(target=_section_loop)
+        self.current_thread = threading.Thread(target=section_loop)
         self.current_thread.start()
 
-    def _create_section_index_list(self, sections):
+    def create_section_index_list(self, sections):
         section_index_list = [section_name for section_name, _ in sections]
         return section_index_list
 
