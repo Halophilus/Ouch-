@@ -24,10 +24,11 @@ class VLCLooper:
         print("STARTING LOOP")
         self._media.set_time(self._start_time)
         while not self._kill:
-            print("SETTING TIME")
+            print("TIME LOOP")
             print(f"GOT TIME: {self._media.get_time()}" )
             print(f"END TIME: {self._end_time}")
             if self._media.get_time() >= self._end_time:
+                print("SETTING TIME")
                 self._media.set_time(self._start_time)
             time.sleep(0.1)
 
@@ -65,7 +66,7 @@ class VLCVideoPlayer:
     def play_video(self, file_path):
         # "--no-video-title-show",
         # "--no-osd",
-        instance = vlc.Instance("--no-xlib", "--vout=mmal_vout")
+        instance = vlc.Instance("--no-xlib",  "--no-video-title-show", "--fullscreen", "--no-osd" "--vout=mmal_vout")
         self.player = instance.media_player_new()
         media = instance.media_new(file_path)
         self.player.set_media(media)
