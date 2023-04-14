@@ -8,7 +8,7 @@ instance = vlc.Instance()
 player = instance.media_player_new()
 
 # Load the media (replace 'path/to/your/video.mp4' with the actual file path)
-media = instance.media_new('path/to/your/video.mp4')
+media = instance.media_new('/home/pi/Ouch-/master.mp4')
 
 # Set the media to the player instance
 player.set_media(media)
