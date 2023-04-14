@@ -2,7 +2,7 @@ from gpiozero import LED, Button
 from VideoPlayer import VLCVideoPlayer
 from time import sleep
 from pathlib import Path
-
+import time
 
 video_files = [("Startup", 5.080),
                ("Main Sequence 1",10.000), 
@@ -26,3 +26,7 @@ yellow_button = Button(1, pull_up=True, hold_time=0.2, hold_repeat=True)
 red_button = Button(7, pull_up=True, hold_time=0.2, hold_repeat=True)
 key_button = Button(25, pull_up=True, hold_time=0.2, hold_repeat=True)
 
+player = VLCVideoPlayer(video_files, master_video)
+
+print(player)
+time.sleep(100000)
