@@ -62,7 +62,7 @@ class VLCVideoPlayer:
         self.player.set_media(media)
         self.player.audio_output_set("analog")
         self.player.play()
-        self.looper = VLCLooper(media=media, start_time = 0, end_time=4000)
+        self.looper = VLCLooper(media=media, start_time = 0, end_time=3)
         self.looper.start()
         time.sleep(10000)
         #first_video = self.section_index_list[0]
