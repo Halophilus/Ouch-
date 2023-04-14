@@ -31,10 +31,11 @@ class VLCVideoPlayer:
         return section_dict
 
     def _play_video(self, file_path):
-        instance = vlc.Instance("--no-xlib --no-osd --fullscreen --no-video-title-show")
+        instance = vlc.Instance("--no-xlib", "--no-osd", "--fullscreen", "--no-video-title-show", "--vout=mmal_vout")
         self.player = instance.media_player_new()
         media = instance.media_new(file_path)
         self.player.set_media(media)
+        self.player.set_fullscreen(True)
         self.player.audio_output_set("analog")
         self.player.play()
         first_video = self.section_index_list[0]
