@@ -19,7 +19,7 @@ class VLCVideoPlayer:
         if file_path is not None:
             self.play_video(file_path)
     
-    def create_section_dictionary(sections):
+    def create_section_dictionary(self, sections):
         tracking_point = 0.0
         section_dict = {}
 
