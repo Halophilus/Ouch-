@@ -19,8 +19,7 @@ video_files = [("Startup", 5.080),
                ("Shutdown", 5.000)
                ]
 master_video = "/home/pi/Ouch-/master.mp4"
-monitor = LED(15)
-power = LED(14)
+
 black_button = Button(8, pull_up=True, hold_time=0.2, hold_repeat=True)
 yellow_button = Button(1, pull_up=True, hold_time=0.2, hold_repeat=True)
 red_button = Button(7, pull_up=True, hold_time=0.2, hold_repeat=True)
@@ -30,6 +29,8 @@ player = VLCVideoPlayer(video_files, master_video)
 
 print(player)
 time.sleep(100000)
+monitor = LED(15)
+power = LED(14)
 monitor.on()
 power.on()
 
