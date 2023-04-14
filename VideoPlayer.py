@@ -28,6 +28,8 @@ class VLCLooper:
             print(f"GOT TIME: {self._media.get_time()}" )
             print(f"END TIME: {self._end_time}")
             if self._media.get_time() >= self._end_time:
+                print("PAUSING")
+                self._media.pause()
                 print("SETTING TIME")
                 self._media.set_time(self._start_time)
             time.sleep(0.1)
