@@ -4,10 +4,7 @@ import threading
 
 class VLCLooper:
     def __init__(self, *, media_player, start_time, end_time):
-        print("AVAILABLE METHODS ON MEDIA PLAYER")
-        print(dir(media_player))
-
-        self._media = media_player
+        self._media_player = media_player
         self._start_time = start_time
         self._end_time = end_time
         self._kill = False
@@ -17,21 +14,25 @@ class VLCLooper:
         if self._task:
             raise Exception("Already Started")
         else:
-            self._task = threading.Thread(target=self._loop)
+            self._task = threading.Thread(target=self._loop,daemon=True)
             self._task.start()
 
     def _loop(self):
         print("STARTING LOOP")
-        self._media.set_time(self._start_time)
+        time.sleep(0.1)
+        self._media_player.set_time(self._start_time)
         while not self._kill:
             print("TIME LOOP")
-            print(f"GOT TIME: {self._media.get_time()}" )
+            print(f"GOT TIME: {self._media_player.get_time()}" )
             print(f"END TIME: {self._end_time}")
-            if self._media.get_time() >= self._end_time:
+            if self._media_player.get_time() >= self._end_time:
                 print("PAUSING")
-                self._media.pause()
+                self._media_player.pause()
+                time.sleep(0.1)
                 print("SETTING TIME")
-                self._media.set_time(self._start_time)
+                self._media_player.set_time(self._start_time)
+                time.sleep(0.1)
+                self._media_player.pause()
             time.sleep(0.1)
 
     def stop(self):
@@ -69,12 +70,12 @@ class VLCVideoPlayer:
         # "--no-video-title-show",
         # "--no-osd",
         instance = vlc.Instance("--no-xlib",  "--no-video-title-show", "--fullscreen", "--no-osd", "--vout=mmal_vout")
-        self.player = instance.media_player_new()
+        player = instance.media_player_new()
         media = instance.media_new(file_path)
-        self.player.set_media(media)
-        self.player.audio_output_set("analog")
-        self.player.play()
-        self.looper = VLCLooper(media_player=self.player, start_time = 0, end_time=5080)
+        player.set_media(media)
+        player.audio_output_set("analog")
+        player.play()
+        self.looper = VLCLooper(media_player=player, start_time = 0, end_time=5080)
         self.looper.start()
         time.sleep(10000)
         #first_video = self.section_index_list[0]
@@ -120,7 +121,3 @@ class VLCVideoPlayer:
         self.stop_loop = False
         self.stop_loop_event.clear()
 
-        # Pause the video and set its position to the very beginning
-        if self.player is not None:
-            self.player.pause()
-            self.player.set_time(0)
