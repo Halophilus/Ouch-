@@ -40,9 +40,9 @@ if __name__ == '__main__':
 
     print("STARTING")
     looping = LoopingVideo(filepath='./video.mp4_new_audio.mp4', segments={
-        'start': LoopingVideo.Segment(
+        'initial_boot': LoopingVideo.Segment(
             start=0,
-            stop=5
+            stop="00:40:791"
         ),
         'two': LoopingVideo.Segment(
             start=8,
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     })
 
     print("FIRST SEGMENT")
-    looping.start(initial_segment_name='two')
+    looping.start(initial_segment_name='initial_boot')
     time.sleep(10)
     print("SECOND SEGMENT")
     looping.play_segment(segment_name='start')
