@@ -1,81 +1,114 @@
 #from gpiozero import LED, Button
-from VideoPlayer import VLCVideoPlayer
 from time import sleep
 from pathlib import Path
 import time
-import sys 
-from python_mpv_jsonipc import MPV
+import looping_video
+import gpiozero
 
 
-video_files = [("Startup", 5.080),
-               ("Main Sequence 1",10.000), 
-               ("Transition 1",2.000),
-               ("Black Button", 3.000),
-               ("Main Sequence 2",10.000),
-               ("Transition 2",2.000),
-               ("Yellow Button",3.000),
-               ("Main Sequence 3",10.000),
-               ("Transition 3", 2.000),
-               ("Red Button", 3.000),
-               ("Credits", 3.920),
-               ("Shutdown Screen", 4.000),
-               ("Shutdown", 5.000)
-               ]
-master_video = "./master.mp4"
+master_video = './video.mp4_new_audio.mp4'
 
-#black_button = Button(8, pull_up=True, hold_time=0.2, hold_repeat=True)
-#yellow_button = Button(1, pull_up=True, hold_time=0.2, hold_repeat=True)
-#red_button = Button(7, pull_up=True, hold_time=0.2, hold_repeat=True)
-#key_button = Button(25, pull_up=True, hold_time=0.2, hold_repeat=True)
+player = looping_video.LoopingVideo(filepath=master_video, segments={
+        'initial_boot': looping_video.LoopingVideo.Segment(
+            start=0,
+            stop=40 # 40.791
+        ),
+        'sequence_1': looping_video.LoopingVideo.Segment(
+            start=41, # 40.791
+            stop="1:45" # 01:45:166
+        ),
+        'transition_1': looping_video.LoopingVideo.Segment(
+            start="1:46", # 01:46:166
+            stop="2:16" # 02:16:541
+        ),
+        'button_1': looping_video.LoopingVideo.Segment(
+            start='2:17',# 02:16:541
+            stop='2:40' # 02:40:291
+        ),
+        'sequence_2': looping_video.LoopingVideo.Segment(
+            start='2:41',# 02:40:291
+            stop='9:02' # 09:02:041
+        ),
+        'transition_2': looping_video.LoopingVideo.Segment(
+            start='9:02', # 09:02:041
+            stop='10:22' # 10:22:583
+        ),
+        'button_2': looping_video.LoopingVideo.Segment(
+            start='10:23', # 10:22:583
+            stop='10:43' # 10:43:458
+        ),
+        'sequence_3': looping_video.LoopingVideo.Segment(
+            start='10:44', # 10:43:458
+            stop='18:15' # 18:15:166
+        ),
+        'transition_3': looping_video.LoopingVideo.Segment(
+            start='18:15', # 18:15:166
+            stop='18:28' # 18:28:708
+        ),
+        'button_3': looping_video.LoopingVideo.Segment(
+            start='18:29', # 18:28:708
+            stop='18:55' # 18:55:708
+        ),
+        'title_card': looping_video.LoopingVideo.Segment(
+            start='18:56', # 18:55:708
+            stop='19:14' # 19:14:791
+        ),
+        'credits': looping_video.LoopingVideo.Segment(
+            start='19:14', # 19:14:791
+            stop='20:50' # 20:50:625
+        ),
+        'shutdown_screen': looping_video.LoopingVideo.Segment(
+            start='19:14', # 19:14:791
+            stop='20:50' # 20:55:958
+        )
+    })
 
-#monitor = LED(15)
-#power = LED(14)
-#monitor.on()
-#power.on()
+player.start(initial_segment_name='initial_boot')
+black_button = gpiozero.Button(8, pull_up=True, hold_time=0.2, hold_repeat=True)
+yellow_button = gpiozero.Button(1, pull_up=True, hold_time=0.2, hold_repeat=True)
+red_button = gpiozero.Button(7, pull_up=True, hold_time=0.2, hold_repeat=True)
+# There is a typo in the code. It should be `red_button = gpiozero.Button(7, pull_up=True,
+# hold_time=0.2, hold_repeat=True)`. This line of code is creating a Button object for a physical
+# button connected to GPIO pin 7 on the Raspberry Pi. The `pull_up=True` argument enables the internal
+# pull-up resistor on the pin, and the `hold_time` and `hold_repeat` arguments specify the duration
+# and repetition of the button hold event.
+key_button = gpiozero.Button(25, pull_up=True, hold_time=0.2, hold_repeat=True)
 
-#player = VLCVideoPlayer(video_files, master_video)
+monitor = gpiozero.LED(15)
+power = gpiozero.LED(14)
+monitor.on()
+power.on()
 
-#print(player)
-# Uses MPV that is in the PATH.
-mpv = MPV(**{ 'fullscreen': True, 'ab-loop-a': '0', 'ab-loop-b': '10'})
-mpv.play("master.mp4")
-sleep(100)
-## The loop-points can be adjusted at runtime with the corresponding properties. See also ab-loop command.
-#m.set_option('input-default-bindings')
-#m.set_option('osc')
-#m.set_option('input-vo-keyboard')
-#m.initialize()
-#m.command('loadfile', "./master.mp4")
-#player.play_section('Startup')
 
-# key_button.wait_for_press()
+key_button.wait_for_press()
+player.skip_to_start(segment_name='sequence_1')
+player.loop_segment_later(segment_name='transition_1')
 
-# player.play_section('Main Sequence 1')
+black_button.wait_for_press()
+player.skip_to_start(segment_name='button_1')
+player.loop_segment_later(segment_name='button_1')
 
-# sleep(10)
+black_button.wait_for_release()
+player.skip_to_start(segment_name='sequence_1')
+player.loop_segment_later(segment_name='transition_2')
 
-# player.play_section('Transition 1')
+yellow_button.wait_for_press()
+player.skip_to_start(segment_name='button_2')
+player.loop_segment_later(segment_name='button_2')
 
-# black_button.wait_for_press()
+yellow_button.wait_for_release()
+player.skip_to_start(segment_name='sequence_1')
+player.loop_segment_later(segment_name='transition_3')
 
-# player.play_section('Black Button')
+red_button.wait_for_press()
+player.skip_to_start(segment_name='button_3')
+player.loop_segment_later(segment_name='button_3')
+red_button.wait_for_release()
 
-# black_button.wait_for_release()
+player.skip_to_start(segment_name='title_card')
 
-# player.play_section('Main Sequence 2')
-
-# sleep(10)
-
-# player.play_section('Transition 2')
-
-# yellow_button.wait_for_press()
-
-# player.play_section('Yellow Button')
-
-# yellow_button.wait_for_release()
-
-# player.play_section('Main Sequence 3')
-
+monitor.off()
+power.off()
 # sleep(10)
 
 # player.play_section('Transition 3')
