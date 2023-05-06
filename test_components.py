@@ -28,10 +28,10 @@ rear_fan = PWMOutputDevice(13)
 buzzer = PWMLED(6)
 
 # Buttons with internal pull-up resistors and debounce-like behavior
-black_button = Button(8, pull_up=True, hold_time=0.3, bounce_time=0.2 hold_repeat=True)
-yellow_button = Button(1, pull_up=True, hold_time=0.3, bounce_time=0.2 hold_repeat=True)
-red_button = Button(7, pull_up=True, hold_time=0.3, bounce_time=0.2 hold_repeat=True)
-key_button = Button(25, pull_up=True, hold_time=0.3, bounce_time=0.2 hold_repeat=True)
+black_button = Button(8, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
+yellow_button = Button(1, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
+red_button = Button(7, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
+key_button = Button(25, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
 
 
 # Distance sensor
