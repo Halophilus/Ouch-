@@ -39,7 +39,7 @@ if __name__ == '__main__':
     import time
 
     print("STARTING")
-    looping = LoopingVideo(filepath='./master.mp4', segments={
+    looping = LoopingVideo(filepath='./video.mp4_new_audio.mp4', segments={
         'start': LoopingVideo.Segment(
             start=0,
             stop=5
