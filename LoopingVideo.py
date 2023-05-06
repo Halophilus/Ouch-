@@ -57,7 +57,47 @@ if __name__ == '__main__':
         'transition_1': LoopingVideo.Segment(
             start="1:46", # 01:46:166
             stop="2:16" # 02:16:541
-        ) 
+        ),
+        'button_1': LoopingVideo.Segment(
+            start='2:17',# 02:16:541
+            stop='2:40' # 02:40:291
+        ),
+        'sequence_2': LoopingVideo.Segment(
+            start='2:41',# 02:40:291
+            stop='9:02' # 09:02:041
+        ),
+        'transition_2': LoopingVideo.Segment(
+            start='9:02', # 09:02:041
+            stop='10:22' # 10:22:583
+        ),
+        'button_2': LoopingVideo.Segment(
+            start='10:23', # 10:22:583
+            stop='10:43' # 10:43:458
+        ),
+        'sequence_3': LoopingVideo.Segment(
+            start='10:44', # 10:43:458
+            stop='18:15' # 18:15:166
+        ),
+        'transition_3': LoopingVideo.Segment(
+            start='18:15', # 18:15:166
+            stop='18:28' # 18:28:708
+        ),
+        'button_3': LoopingVideo.Segment(
+            start='18:29', # 18:28:708
+            stop='18:55' # 18:55:708
+        ),
+        'title_card': LoopingVideo.Segment(
+            start='18:56', # 18:55:708
+            stop='19:14' # 19:14:791
+        ),
+        'credits': LoopingVideo.Segment(
+            start='19:14', # 19:14:791
+            stop='20:50' # 20:50:625
+        ),
+        'shutdown_screen': LoopingVideo.Segment(
+            start='19:14', # 19:14:791
+            stop='20:50' # 20:55:958
+        )
     })
 
     print("FIRST SEGMENT")
