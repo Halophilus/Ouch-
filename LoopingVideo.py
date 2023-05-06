@@ -1,12 +1,12 @@
 import dataclasses
 import python_mpv_jsonipc
-
+import typing
 
 class LoopingVideo:
     @dataclasses.dataclass(frozen=True)
     class Segment:
-        start: str
-        stop: str
+        start: typing.Union[int, str]
+        stop: typing.Union[int, str]
 
     def __init__(self, *, filepath, segments):
         self._filepath = filepath
