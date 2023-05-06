@@ -26,12 +26,18 @@ class LoopingVideo:
         })
         self._mpv.play(self._filepath)
 
-    def play_segment(self, *, segment_name):
+    def skip_to_start(self, *, segment_name):
         if self._mpv is None:
             raise Exception('Not started')
 
         segment = self._segments[segment_name]
         self._mpv.command('seek', segment.start, 'absolute')
+
+    def loop_segment_later(self, *, segment_name):
+        if self._mpv is None:
+            raise Exception('Not started')
+
+        segment = self._segments[segment_name]
         self._mpv.command('set', 'ab-loop-a', str(segment.start))
         self._mpv.command('set', 'ab-loop-b', str(segment.stop))
     
@@ -47,12 +53,17 @@ if __name__ == '__main__':
         'sequence_1': LoopingVideo.Segment(
             start=41, # 40.791
             stop="1:45" # 01:45:166
-        )
+        ),
+        'transition_1': LoopingVideo.Segment(
+            start="1:46", # 01:46:166
+            stop="2:16" # 02:16:541
+        ) 
     })
 
     print("FIRST SEGMENT")
     looping.start(initial_segment_name='initial_boot')
     time.sleep(10)
     print("SECOND SEGMENT")
-    looping.play_segment(segment_name='sequence_1')
+    looping.skip_to_start(segment_name='sequence_1')
+    looping.loop_segment_later(segment_name='transition_1')
 
