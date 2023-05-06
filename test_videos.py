@@ -89,7 +89,7 @@ player.skip_to_start(segment_name='button_1')
 player.loop_segment_later(segment_name='button_1')
 
 black_button.wait_for_release()
-player.skip_to_start(segment_name='sequence_1')
+player.skip_to_start(segment_name='sequence_2')
 player.loop_segment_later(segment_name='transition_2')
 
 yellow_button.wait_for_press()
@@ -97,7 +97,7 @@ player.skip_to_start(segment_name='button_2')
 player.loop_segment_later(segment_name='button_2')
 
 yellow_button.wait_for_release()
-player.skip_to_start(segment_name='sequence_1')
+player.skip_to_start(segment_name='sequence_3')
 player.loop_segment_later(segment_name='transition_3')
 
 red_button.wait_for_press()
