@@ -16,7 +16,7 @@ class LoopingVideo:
                 return self.start
 
             min, sec = self.start.split(':')
-            return min * 60 + sec
+            return int(min) * 60 + int(sec)
 
         @property
         def stop_in_seconds(self):
@@ -24,7 +24,7 @@ class LoopingVideo:
                 return self.stop
 
             min, sec = self.stop.split(':')
-            return min * 60 + sec
+            return int(min) * 60 + int(sec)
 
     def __init__(self, *, filepath, segments):
         self._filepath = filepath
@@ -67,7 +67,7 @@ class LoopingVideo:
 
         while True:
             time.sleep(0.15)
-            if segment.start_in_seconds < self._mpv.time_pos:
+            if segment.start_in_seconds < float(self._mpv.time_pos):
                 return
     
 if __name__ == '__main__':
