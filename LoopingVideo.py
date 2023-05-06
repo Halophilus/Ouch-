@@ -31,9 +31,9 @@ class LoopingVideo:
             raise Exception('Not started')
 
         segment = self._segments[segment_name]
+        self._mpv.command('seek', segment.start, 'absolute')
         self._mpv.command('set', 'ab-loop-a', str(segment.start))
         self._mpv.command('set', 'ab-loop-b', str(segment.stop))
-        self._mpv.command('seek', segment.start, 'absolute')
     
 if __name__ == '__main__':
     import time
