@@ -79,54 +79,51 @@ power = gpiozero.LED(14)
 monitor.on()
 power.on()
 
-
+print("WAITING FOR KEY BUTTON")
 key_button.wait_for_press()
 player.skip_to_start(segment_name='sequence_1')
 player.loop_segment_later(segment_name='transition_1')
 
+print("WAITING FOR TRANSITION 1")
+player.wait_for_segment_to_be_reached(segment_name='transition_1')
+
+
+print("WAITING FOR BLACK BUTTON PRESS")
 black_button.wait_for_press()
 player.skip_to_start(segment_name='button_1')
 player.loop_segment_later(segment_name='button_1')
 
+print("WAITING FOR BLACK BUTTON RELEASE")
 black_button.wait_for_release()
 player.skip_to_start(segment_name='sequence_2')
 player.loop_segment_later(segment_name='transition_2')
 
+print("WAITING FOR TRANSITION 2")
+player.wait_for_segment_to_be_reached(segment_name='transition_2')
+
+print("WAITING FOR YELLOW BUTTON PRESS")
 yellow_button.wait_for_press()
 player.skip_to_start(segment_name='button_2')
 player.loop_segment_later(segment_name='button_2')
 
+print("WAITING FOR YELLOW BUTTON RELEASE")
 yellow_button.wait_for_release()
 player.skip_to_start(segment_name='sequence_3')
 player.loop_segment_later(segment_name='transition_3')
 
+print("WAITING FOR TRANSITION 3")
+player.wait_for_segment_to_be_reached(segment_name='transition_3')
+
+print("WAITING FOR RED BUTTON PRESS")
 red_button.wait_for_press()
 player.skip_to_start(segment_name='button_3')
 player.loop_segment_later(segment_name='button_3')
+
+print("WAITING FOR RED BUTTON RELEASE")
 red_button.wait_for_release()
 
 player.skip_to_start(segment_name='title_card')
 
 monitor.off()
 power.off()
-# sleep(10)
 
-# player.play_section('Transition 3')
-
-# yellow_button.wait_for_press()
-
-# player.play_section('Red Button')
-
-# yellow_button.wait_for_release()
-
-# player.play_section('Credits')
-
-# sleep(3.920)
-
-# player.play_video('Shutdown Screen')
-
-# key_button.wait_for_release
-
-# player.stop()
-# monitor.off()
-# power.off()

@@ -8,6 +8,23 @@ class LoopingVideo:
         start: typing.Union[int, str]
         stop: typing.Union[int, str]
 
+
+        @property
+        def start_in_seconds(self):
+            if isinstance(self.start, int):
+                return self.start
+
+            min, sec = self.start.split(':')
+            return min * 60 + sec
+
+        @property
+        def stop_in_seconds(self):
+            if isinstance(self.stop, int):
+                return self.stop
+
+            min, sec = self.stop.split(':')
+            return min * 60 + sec
+
     def __init__(self, *, filepath, segments):
         self._filepath = filepath
         self._segments = segments
@@ -40,6 +57,17 @@ class LoopingVideo:
         segment = self._segments[segment_name]
         self._mpv.command('set', 'ab-loop-a', str(segment.start))
         self._mpv.command('set', 'ab-loop-b', str(segment.stop))
+
+    def wait_for_segment_to_be_reached(self, *, segment_name):
+        if self._mpv is None:
+            raise Exception('Not started')
+
+        segment = self._segments[segment_name]
+
+        while True:
+            time.sleep(0.15)
+            if segment.start_in_seconds < self._mpv.time_pos:
+                return
     
 if __name__ == '__main__':
     import time
@@ -102,8 +130,9 @@ if __name__ == '__main__':
 
     print("FIRST SEGMENT")
     looping.start(initial_segment_name='initial_boot')
-    time.sleep(10)
+    time.sleep(1)
     print("SECOND SEGMENT")
     looping.skip_to_start(segment_name='sequence_1')
     looping.loop_segment_later(segment_name='transition_1')
+    looping.wait_for_segment_to_be_reached(segment_name='transition_1')
 
