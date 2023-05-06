@@ -1,6 +1,7 @@
 import dataclasses
 import python_mpv_jsonipc
 import typing
+import time
 
 class LoopingVideo:
     @dataclasses.dataclass(frozen=True)
