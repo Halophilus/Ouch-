@@ -1,8 +1,11 @@
-from gpiozero import LED, Button
+#from gpiozero import LED, Button
 from VideoPlayer import VLCVideoPlayer
 from time import sleep
 from pathlib import Path
 import time
+import sys 
+from python_mpv_jsonipc import MPV
+
 
 video_files = [("Startup", 5.080),
                ("Main Sequence 1",10.000), 
@@ -18,71 +21,79 @@ video_files = [("Startup", 5.080),
                ("Shutdown Screen", 4.000),
                ("Shutdown", 5.000)
                ]
-master_video = "/home/pi/Ouch-/master.mp4"
+master_video = "./master.mp4"
 
-black_button = Button(8, pull_up=True, hold_time=0.2, hold_repeat=True)
-yellow_button = Button(1, pull_up=True, hold_time=0.2, hold_repeat=True)
-red_button = Button(7, pull_up=True, hold_time=0.2, hold_repeat=True)
-key_button = Button(25, pull_up=True, hold_time=0.2, hold_repeat=True)
+#black_button = Button(8, pull_up=True, hold_time=0.2, hold_repeat=True)
+#yellow_button = Button(1, pull_up=True, hold_time=0.2, hold_repeat=True)
+#red_button = Button(7, pull_up=True, hold_time=0.2, hold_repeat=True)
+#key_button = Button(25, pull_up=True, hold_time=0.2, hold_repeat=True)
 
-monitor = LED(15)
-power = LED(14)
-monitor.on()
-power.on()
+#monitor = LED(15)
+#power = LED(14)
+#monitor.on()
+#power.on()
 
-player = VLCVideoPlayer(video_files, master_video)
+#player = VLCVideoPlayer(video_files, master_video)
 
-print(player)
+#print(player)
+# Uses MPV that is in the PATH.
+mpv = MPV(**{ 'fullscreen': True, 'ab-loop-a': '0', 'ab-loop-b': '10'})
+mpv.play("master.mp4")
+sleep(100)
+## The loop-points can be adjusted at runtime with the corresponding properties. See also ab-loop command.
+#m.set_option('input-default-bindings')
+#m.set_option('osc')
+#m.set_option('input-vo-keyboard')
+#m.initialize()
+#m.command('loadfile', "./master.mp4")
+#player.play_section('Startup')
 
+# key_button.wait_for_press()
 
-player.play_section('Startup')
+# player.play_section('Main Sequence 1')
 
-key_button.wait_for_press()
+# sleep(10)
 
-player.play_section('Main Sequence 1')
+# player.play_section('Transition 1')
 
-sleep(10)
+# black_button.wait_for_press()
 
-player.play_section('Transition 1')
+# player.play_section('Black Button')
 
-black_button.wait_for_press()
+# black_button.wait_for_release()
 
-player.play_section('Black Button')
+# player.play_section('Main Sequence 2')
 
-black_button.wait_for_release()
+# sleep(10)
 
-player.play_section('Main Sequence 2')
+# player.play_section('Transition 2')
 
-sleep(10)
+# yellow_button.wait_for_press()
 
-player.play_section('Transition 2')
+# player.play_section('Yellow Button')
 
-yellow_button.wait_for_press()
+# yellow_button.wait_for_release()
 
-player.play_section('Yellow Button')
+# player.play_section('Main Sequence 3')
 
-yellow_button.wait_for_release()
+# sleep(10)
 
-player.play_section('Main Sequence 3')
+# player.play_section('Transition 3')
 
-sleep(10)
+# yellow_button.wait_for_press()
 
-player.play_section('Transition 3')
+# player.play_section('Red Button')
 
-yellow_button.wait_for_press()
+# yellow_button.wait_for_release()
 
-player.play_section('Red Button')
+# player.play_section('Credits')
 
-yellow_button.wait_for_release()
+# sleep(3.920)
 
-player.play_section('Credits')
+# player.play_video('Shutdown Screen')
 
-sleep(3.920)
+# key_button.wait_for_release
 
-player.play_video('Shutdown Screen')
-
-key_button.wait_for_release
-
-player.stop()
-monitor.off()
-power.off()
+# player.stop()
+# monitor.off()
+# power.off()
