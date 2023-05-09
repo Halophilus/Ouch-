@@ -2,6 +2,7 @@ import dataclasses
 import python_mpv_jsonipc
 import typing
 import time
+import poll_result
 
 class LoopingVideo:
     @dataclasses.dataclass(frozen=True)
@@ -59,16 +60,20 @@ class LoopingVideo:
         self._mpv.command('set', 'ab-loop-a', str(segment.start))
         self._mpv.command('set', 'ab-loop-b', str(segment.stop))
 
-    def wait_for_segment_to_be_reached(self, *, segment_name):
+    # true if interrupted
+    # false if reached normally
+    def wait_for_segment_to_be_reached(self, *, segment_name, interrupt_check):
         if self._mpv is None:
             raise Exception('Not started')
 
         segment = self._segments[segment_name]
 
         while True:
+            if interrupt_check():
+                return poll_result.PollResult.SHOULD_RESTART
             time.sleep(0.15)
             if segment.start_in_seconds < float(self._mpv.time_pos):
-                return
+                return poll_result.PollResult.CONTINUE
     
 if __name__ == '__main__':
     import time
