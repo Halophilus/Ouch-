@@ -5,6 +5,7 @@ import time
 import looping_video
 import gpiozero
 import poll_result
+import flickering_light
 
 master_video = './video.mp4_new_audio.mp4'
 
@@ -153,8 +154,13 @@ class Script:
 
         monitor.on()
 
+        powerLight.off()
+
         print("WAITING FOR KEY BUTTON")
         key_button.wait_for_press()
+
+        powerLight.color(0, 0, 0)
+        powerLight.on()
 
         player.skip_to_start(segment_name='sequence_1')
         player.loop_segment_later(segment_name='transition_1')
@@ -180,6 +186,8 @@ class Script:
             return self.restart()
         black_button.when_pressed = defaultButtonPress
 
+        powerLight.color(0, 0, 1)
+
         player.skip_to_start(segment_name='sequence_2')
         player.loop_segment_later(segment_name='transition_2')
 
@@ -203,6 +211,7 @@ class Script:
             return self.restart()
         yellow_button.when_pressed = defaultButtonPress
         
+        powerLight.color(0, 1, 1)
         player.skip_to_start(segment_name='sequence_3')
         player.loop_segment_later(segment_name='transition_3')
 
