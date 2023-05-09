@@ -10,14 +10,18 @@ class FlickeringLight:
         self._thread = None
 
     def _activity(self):
-        while True:
-            if self._kill:
-                self._thread = None
-                break
-            time.sleep(random.uniform(0,self._freq))
-            self._led.on()
-            time.sleep(random.uniform(0, self._freq/2))
-            self._led.off()
+        try:
+            while True:
+                if self._kill:
+                    self._thread = None
+                    break
+                time.sleep(random.uniform(0,self._freq))
+                self._led.on()
+                time.sleep(random.uniform(0, self._freq/2))
+                self._led.off()
+        except Exception as e:
+            print(e)
+            self._activity()
 
     def start(self):
         if self._thread is not None:
