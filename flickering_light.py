@@ -42,8 +42,6 @@ class FlickeringLight:
 if __name__ == '__main__':
     import gpiozero
 
-    activity = gpiozero.LED(10)
-
     flickering = FlickeringLight(
         led=gpiozero.LED(10)
     )
