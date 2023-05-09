@@ -64,15 +64,10 @@ player = looping_video.LoopingVideo(filepath=master_video, segments={
     })
 
 player.start(initial_segment_name='initial_boot')
-black_button = gpiozero.Button(8, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
-yellow_button = gpiozero.Button(1, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
-red_button = gpiozero.Button(7, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
-# There is a typo in the code. It should be `red_button = gpiozero.Button(7, pull_up=True,
-# hold_time=0.2, hold_repeat=True)`. This line of code is creating a Button object for a physical
-# button connected to GPIO pin 7 on the Raspberry Pi. The `pull_up=True` argument enables the internal
-# pull-up resistor on the pin, and the `hold_time` and `hold_repeat` arguments specify the duration
-# and repetition of the button hold event.
-key_button = gpiozero.Button(25, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
+black_button = gpiozero.Button(8, pull_up=True, hold_time=0.3, bounce_time=0.2)
+yellow_button = gpiozero.Button(1, pull_up=True, hold_time=0.3, bounce_time=0.2)
+red_button = gpiozero.Button(7, pull_up=True, hold_time=0.3, bounce_time=0.2)
+access_button = gpiozero.Button(25, pull_up=True, hold_time=0.3, bounce_time=0.2)
 
 monitor = gpiozero.LED(15)
 power = gpiozero.LED(14)

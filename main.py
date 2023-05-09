@@ -3,10 +3,67 @@ from gpiozero import LED, RGBLED, PWMOutputDevice
 from colorzero import Color
 from time import sleep
 from VideoPlayer import OmxplayerPlayer
+import looping_video
 import random
 import threading
 
-player = OmxplayerPlayer()
+master_video = './video.mp4_new_audio.mp4'
+
+player = looping_video.LoopingVideo(filepath=master_video, segments={
+        'initial_boot': looping_video.LoopingVideo.Segment(
+            start=0,
+            stop=40 # 40.791
+        ),
+        'sequence_1': looping_video.LoopingVideo.Segment(
+            start=41, # 40.791
+            stop="1:45" # 01:45:166
+        ),
+        'transition_1': looping_video.LoopingVideo.Segment(
+            start="1:46", # 01:46:166
+            stop="2:16" # 02:16:541
+        ),
+        'button_1': looping_video.LoopingVideo.Segment(
+            start='2:17',# 02:16:541
+            stop='2:40' # 02:40:291
+        ),
+        'sequence_2': looping_video.LoopingVideo.Segment(
+            start='2:41',# 02:40:291
+            stop='9:02' # 09:02:041
+        ),
+        'transition_2': looping_video.LoopingVideo.Segment(
+            start='9:02', # 09:02:041
+            stop='10:22' # 10:22:583
+        ),
+        'button_2': looping_video.LoopingVideo.Segment(
+            start='10:23', # 10:22:583
+            stop='10:43' # 10:43:458
+        ),
+        'sequence_3': looping_video.LoopingVideo.Segment(
+            start='10:44', # 10:43:458
+            stop='18:15' # 18:15:166
+        ),
+        'transition_3': looping_video.LoopingVideo.Segment(
+            start='18:15', # 18:15:166
+            stop='18:28' # 18:28:708
+        ),
+        'button_3': looping_video.LoopingVideo.Segment(
+            start='18:29', # 18:28:708
+            stop='18:55' # 18:55:708
+        ),
+        'title_card': looping_video.LoopingVideo.Segment(
+            start='18:56', # 18:55:708
+            stop='19:14' # 19:14:791
+        ),
+        'credits': looping_video.LoopingVideo.Segment(
+            start='19:14', # 19:14:791
+            stop='20:50' # 20:50:625
+        ),
+        'shutdown_screen': looping_video.LoopingVideo.Segment(
+            start='19:14', # 19:14:791
+            stop='20:50' # 20:55:958
+        )
+    })
+
 function_thread = None
 stop_thread = True
 
@@ -17,52 +74,48 @@ monitor = LED(15)
 activity = LED(10)
 fog = LED(9)
 powerLight = RGBLED(18,27,22, active_high = False)
+powerLightColors = [(1,1,1),(0,0,0),(0,0,1),(0,1,1)]
 
-access_button = Button(25)
-red_button = Button(7)
-yellow_button = Button(1)
-black_button = Button(8)
 
-def defaultButtonPress():
-    warning_buzzer.on()
-
-def defaultButtonRelease():
-    warning_buzzer.off()
-
-red_button.when_pressed = defaultButtonPress
-yellow_button.when_pressed = defaultButtonPress
-black_button.when_pressed = defaultButtonPress
-
-red_button.when_released = defaultButtonRelease
-yellow_button.when_released = defaultButtonRelease
-black_button.when_released = defaultButtonRelease
+black_button = Button(8, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
+yellow_button = Button(1, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
+red_button = Button(7, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
+access_button = Button(25, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
 
 red_button_waiting = False
 yellow_button_waiting = False
 black_button_waiting = False
 
-def red_button_press():
-    global red_button_waiting
-    red_button_waiting = True
+button_panel = [black_button, yellow_button, red_button]
+
+def defaultButtonPress():
+    warning_buzzer.on()
+def defaultButtonRelease():
+    warning_buzzer.off()
+for button in button_panel:
+    button.when_pressed = defaultButtonPress
+    button.when_released = defaultButtonRelease
+
+def wrongButtonBuzzer():
     for _ in range(3):
         warning_buzzer.on()
         sleep(0.2)
         warning_buzzer.off()
+        sleep(0.2)
+def red_button_press():
+    global red_button_waiting
+    if red_button_waiting:
+        
+    wrongButtonBuzzer()
 def yellow_button_press():
     global yellow_button_waiting
     yellow_button_waiting = True
-    for _ in range(3):
-        warning_buzzer.on()
-        sleep(0.2)
-        warning_buzzer.off()
+    wrongButtonBuzzer()
 def black_button_press():
     global black_button_waiting
     black_button_waiting = True
-    for _ in range(3):
-        warning_buzzer.on()
-        sleep(0.2)
-        warning_buzzer.off()
-
+    wrongButtonBuzzer()
+        
 def red_button_release():
     global red_button_waiting
     red_button_waiting = False
@@ -81,14 +134,25 @@ def black_button_release():
 
 frontFan = PWMOutputDevice(12)
 rearFan = PWMOutputDevice(13)
+fanSpeed = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
 
-lowFanHz = 0.2
-lowPlusHz = 0.4
-midFanHz = 0.6
-hiFanHz = 0.8
+powerBoolean = False
+sensor = DistanceSensor(echo=18, trigger=17, max_distance=4, threshold_distance=3.85)
 
-sensor = DistanceSensor(echo=18, trigger=17)
-
+def someone_is_near():
+    global powerBoolean
+    powerBoolean = True
+    power.on()
+    monitor.on()
+def no_one_near():
+    global powerBoolean
+    powerBoolean = False
+    sleep(30)
+    if not powerBoolean:
+        power.off()
+        monitor.off()
+sensor.when_in_range = someone_is_near
+sensor.when_out_of_range = no_one_near
 
 flickerFreq = 2
 flickill = False
@@ -119,6 +183,7 @@ def run_sequence():
     while not stop_thread:
         button_tracker = False
         player.play("Main Sequence/1.MP4")
+        
         powerLight.color(0,1,1)
         activity.off()
         flickerThread.start()
