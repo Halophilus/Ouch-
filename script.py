@@ -173,7 +173,7 @@ class Script:
         player.loop_segment_later(segment_name='button_1')
 
         print("WAITING FOR BLACK BUTTON RELEASE")
-        if self.wait_for_release(black_button.wait_for_release) == poll_result.PollResult.SHOULD_RESTART:
+        if self.wait_for_release(black_button) == poll_result.PollResult.SHOULD_RESTART:
             return self.restart()
         black_button.when_pressed = defaultButtonPress
 
