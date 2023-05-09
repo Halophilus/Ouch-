@@ -12,7 +12,7 @@ class FlickeringLight:
     def _activity(self):
         try:
             while True:
-                print("L")
+                print("L", flush=True)
                 if self._kill:
                     self._thread = None
                     break
@@ -21,7 +21,7 @@ class FlickeringLight:
                 time.sleep(random.uniform(0, self._freq/2))
                 self._led.off()
         except Exception as e:
-            print(e)
+            print(e, flush=True)
             self._activity()
 
     def start(self):
