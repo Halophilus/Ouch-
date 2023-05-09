@@ -89,7 +89,11 @@ distance_sensor = gpiozero.DistanceSensor(echo=20, trigger=21)
 
 # Buzzer
 warning_buzzer = gpiozero.Buzzer(6)
-button_panel = [black_button, yellow_button, red_button]
+button_panel = {
+    "black": black_button,
+    "yellow": yellow_button,
+    "red": red_button
+}
 
 power.on()
 monitor.on()
@@ -106,6 +110,8 @@ class Script:
         player.loop_segment_later(segment_name='initial_boot')
 
     def wait_for_press(self, button):
+        return button.wait_for_press() and poll_result.PollResult.CONTINUE
+        
         while True:
             if self.should_restart:
                 return poll_result.PollResult.SHOULD_RESTART
@@ -114,6 +120,7 @@ class Script:
             time.sleep(0.1)
 
     def wait_for_release(self, button):
+        return button.wait_for_release() and poll_result.PollResult.CONTINUE
         while True:
             if self.should_restart:
                 return poll_result.PollResult.SHOULD_RESTART
@@ -137,9 +144,11 @@ class Script:
         distance_sensor.when_in_range = lambda: self.someone_is_near()
         distance_sensor.when_out_of_range = lambda: self.no_one_near()
         # Set up buzzers
-        def defaultButtonPress():
+        def defaultButtonPress(button_name):
+            print("PRESSED: " + button_name)
             warning_buzzer.on()
-        def defaultButtonRelease():
+        def defaultButtonRelease(button_name):
+            print("RELEASED: " + button_name)
             warning_buzzer.off()
         
         def rightButtonBuzzer():
@@ -148,9 +157,9 @@ class Script:
                 sleep(0.2)
                 warning_buzzer.off()
                 sleep(0.2)
-        for button in button_panel:
-            button.when_pressed = defaultButtonPress
-            button.when_released = defaultButtonRelease
+        for k in button_panel.keys():
+            button_panel[k].when_pressed = lambda: defaultButtonPress(k)
+            button_panel[k].when_released = lambda: defaultButtonRelease(k)
 
         monitor.on()
 
