@@ -110,8 +110,6 @@ class Script:
         player.loop_segment_later(segment_name='initial_boot')
 
     def wait_for_press(self, button):
-        return button.wait_for_press() and poll_result.PollResult.CONTINUE
-        
         while True:
             if self.should_restart:
                 return poll_result.PollResult.SHOULD_RESTART
@@ -120,7 +118,6 @@ class Script:
             time.sleep(0.1)
 
     def wait_for_release(self, button):
-        return button.wait_for_release() and poll_result.PollResult.CONTINUE
         while True:
             if self.should_restart:
                 return poll_result.PollResult.SHOULD_RESTART
@@ -150,16 +147,30 @@ class Script:
         def defaultButtonRelease(button_name):
             print("RELEASED: " + button_name)
             warning_buzzer.off()
+
+        black_press = lambda: defaultButtonPress("BLACK")
+        red_press = lambda: defaultButtonPress("RED")
+        yellow_press = lambda: defaultButtonPress("YELLOW")
         
+        black_release = lambda: defaultButtonRelease("BLACK")
+        red_release = lambda: defaultButtonRelease("RED")
+        yellow_release = lambda: defaultButtonRelease("YELLOW")
+
+        red_button.when_pressed = red_press
+        red_button.when_released = red_release
+
+        black_button.when_pressed = black_press
+        black_button.when_released = black_release
+
+        yellow_button.when_pressed = yellow_press
+        yellow_button.when_released = yellow_release
+
         def rightButtonBuzzer():
             for _ in range(3):
                 warning_buzzer.on()
                 sleep(0.2)
                 warning_buzzer.off()
                 sleep(0.2)
-        for k in button_panel.keys():
-            button_panel[k].when_pressed = lambda: defaultButtonPress(k)
-            button_panel[k].when_released = lambda: defaultButtonRelease(k)
 
         monitor.on()
 
@@ -193,7 +204,7 @@ class Script:
         print("WAITING FOR BLACK BUTTON RELEASE")
         if self.wait_for_release(black_button) == poll_result.PollResult.SHOULD_RESTART:
             return self.restart()
-        black_button.when_pressed = defaultButtonPress
+        black_button.when_pressed = black_press
 
         powerLight.color = (0, 0, 1)
 
@@ -218,7 +229,7 @@ class Script:
         print("WAITING FOR YELLOW BUTTON RELEASE")
         if self.wait_for_release(yellow_button) == poll_result.PollResult.SHOULD_RESTART:
             return self.restart()
-        yellow_button.when_pressed = defaultButtonPress
+        yellow_button.when_pressed = yellow_press
         
         powerLight.color = (0, 1, 1)
         player.skip_to_start(segment_name='sequence_3')
@@ -242,7 +253,7 @@ class Script:
         print("WAITING FOR RED BUTTON RELEASE")
         if self.wait_for_release(red_button) == poll_result.PollResult.SHOULD_RESTART:
             return self.restart()
-        red_button.when_pressed = defaultButtonPress
+        red_button.when_pressed = red_press
 
         player.skip_to_start(segment_name='title_card')
         player.loop_segment_later(segment_name='title_card')
