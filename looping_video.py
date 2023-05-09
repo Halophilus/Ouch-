@@ -66,6 +66,9 @@ class LoopingVideo:
         if self._mpv is None:
             raise Exception('Not started')
 
+        # TODO: remove
+        return poll_result.PollResult.CONTINUE
+
         segment = self._segments[segment_name]
 
         while True:

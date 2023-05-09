@@ -158,10 +158,11 @@ class Script:
         player.loop_segment_later(segment_name='transition_1')
 
         print("WAITING FOR TRANSITION 3")
-        player.wait_for_segment_to_be_reached(
+        if player.wait_for_segment_to_be_reached(
             segment_name='transition_1',
             interrupt_check = lambda: self._restart
-        )
+        ) == poll_result.PollResult.SHOULD_RESTART:
+            return self.restart()
 
 
         print("WAITING FOR BLACK BUTTON PRESS")
@@ -181,10 +182,11 @@ class Script:
         player.loop_segment_later(segment_name='transition_2')
 
         print("WAITING FOR TRANSITION 2")
-        player.wait_for_segment_to_be_reached(
+        if player.wait_for_segment_to_be_reached(
             segment_name='transition_2',
             interrupt_check = lambda: self._restart
-        )
+        ) == poll_result.PollResult.SHOULD_RESTART:
+            return self.restart()
 
         print("WAITING FOR YELLOW BUTTON PRESS")
         yellow_button.when_pressed = rightButtonBuzzer
@@ -203,7 +205,12 @@ class Script:
         player.loop_segment_later(segment_name='transition_3')
 
         print("WAITING FOR TRANSITION 3")
-        player.wait_for_segment_to_be_reached(segment_name='transition_3')
+        if player.wait_for_segment_to_be_reached(
+            segment_name='transition_3',
+            interrupt_check = lambda: self._restart
+        ) == poll_result.PollResult.SHOULD_RESTART:
+            return self.restart()
+
 
         print("WAITING FOR RED BUTTON PRESS")
         red_button.when_pressed = rightButtonBuzzer
