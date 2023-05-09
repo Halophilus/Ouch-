@@ -39,7 +39,7 @@ class LoopingVideo:
         initial = self._segments[initial_segment_name]
         self._mpv = python_mpv_jsonipc.MPV(**{ 
             # TODO: add back
-            # 'fullscreen': True,
+            'fullscreen': True,
             'ab-loop-a': str(initial.start),
             'ab-loop-b': str(initial.stop),
             'start': str(initial.start)
@@ -67,8 +67,8 @@ class LoopingVideo:
         if self._mpv is None:
             raise Exception('Not started')
 
-        # TODO: remove
-        return poll_result.PollResult.CONTINUE
+        # TODO: use to test instant buttons
+        # return poll_result.PollResult.CONTINUE
 
         segment = self._segments[segment_name]
 

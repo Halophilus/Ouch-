@@ -257,6 +257,7 @@ class Script:
 
         player.skip_to_start(segment_name='title_card')
         player.loop_segment_later(segment_name='title_card')
+        
         monitor.off()
         power.off()
 
