@@ -38,7 +38,8 @@ class LoopingVideo:
         
         initial = self._segments[initial_segment_name]
         self._mpv = python_mpv_jsonipc.MPV(**{ 
-            'fullscreen': True,
+            # TODO: add back
+            # 'fullscreen': True,
             'ab-loop-a': str(initial.start),
             'ab-loop-b': str(initial.stop),
             'start': str(initial.start)

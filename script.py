@@ -90,12 +90,15 @@ distance_sensor = gpiozero.DistanceSensor(echo=20, trigger=21)
 warning_buzzer = gpiozero.Buzzer(6)
 button_panel = [black_button, yellow_button, red_button]
 
-
 power.on()
+monitor.on()
 class Script:
     def __init__(self):
-        self._restart = False
         self._near = True
+
+    @property
+    def should_restart(self):
+        return not key_button.is_pressed
 
     def restart(self):
         player.skip_to_start(segment_name='initial_boot')
@@ -103,7 +106,7 @@ class Script:
 
     def wait_for_press(self, button):
         while True:
-            if self._restart:
+            if self.should_restart:
                 return poll_result.PollResult.SHOULD_RESTART
             if button.is_pressed:
                 return poll_result.PollResult.CONTINUE
@@ -111,7 +114,7 @@ class Script:
 
     def wait_for_release(self, button):
         while True:
-            if self._restart:
+            if self.should_restart:
                 return poll_result.PollResult.SHOULD_RESTART
             if not button.is_pressed:
                 return poll_result.PollResult.CONTINUE
@@ -160,7 +163,7 @@ class Script:
         print("WAITING FOR TRANSITION 1")
         if player.wait_for_segment_to_be_reached(
             segment_name='transition_1',
-            interrupt_check = lambda: self._restart
+            interrupt_check = lambda: self.should_restart
         ) == poll_result.PollResult.SHOULD_RESTART:
             return self.restart()
 
@@ -184,7 +187,7 @@ class Script:
         print("WAITING FOR TRANSITION 2")
         if player.wait_for_segment_to_be_reached(
             segment_name='transition_2',
-            interrupt_check = lambda: self._restart
+            interrupt_check = lambda: self.should_restart
         ) == poll_result.PollResult.SHOULD_RESTART:
             return self.restart()
 
@@ -207,7 +210,7 @@ class Script:
         print("WAITING FOR TRANSITION 3")
         if player.wait_for_segment_to_be_reached(
             segment_name='transition_3',
-            interrupt_check = lambda: self._restart
+            interrupt_check = lambda: self.should_restart
         ) == poll_result.PollResult.SHOULD_RESTART:
             return self.restart()
 
@@ -225,9 +228,11 @@ class Script:
         red_button.when_pressed = defaultButtonPress
 
         player.skip_to_start(segment_name='title_card')
-
+        player.loop_segment_later(segment_name='title_card')
         monitor.off()
         power.off()
+
+        self.restart()
 
     def run(self):
         while True:
