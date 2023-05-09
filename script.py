@@ -234,3 +234,5 @@ class Script:
             self._run()
             print("RESTARTING")
 
+if __name__ == '__main__':
+    Script().run()
