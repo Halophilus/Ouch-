@@ -12,6 +12,7 @@ class FlickeringLight:
     def _activity(self):
         try:
             while True:
+                print("L")
                 if self._kill:
                     self._thread = None
                     break
@@ -48,10 +49,12 @@ if __name__ == '__main__':
 
     led = gpiozero.LED(10)
 
+    print("ON")
     led.on()
 
     time.sleep(5)
 
+    print("OFF")
     led.off()
 
     time.sleep(5)
@@ -60,14 +63,17 @@ if __name__ == '__main__':
         led=led
     )
     
+    print("FLICKERING")
     flickering.start()
 
     time.sleep(10)
 
+    print("FASTER")
     flickering.freq = 0.5
 
     time.sleep(5)
 
+    print("FASTER!!")
     flickering.freq = 0.25
 
     time.sleep(5)
