@@ -77,9 +77,6 @@ activity = gpiozero.LED(10)
 front_fan = gpiozero.PWMOutputDevice(12)
 rear_fan = gpiozero.PWMOutputDevice(13)
 
-# Buzzer
-buzzer = gpiozero.PWMLED(6)
-
 # Buttons with internal pull-up resistors and debounce-like behavior
 black_button = gpiozero.Button(8, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
 yellow_button = gpiozero.Button(1, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
