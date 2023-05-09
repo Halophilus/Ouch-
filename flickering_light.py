@@ -42,8 +42,18 @@ class FlickeringLight:
 if __name__ == '__main__':
     import gpiozero
 
+    led = gpiozero.LED(10)
+
+    led.on()
+
+    time.sleep(5)
+
+    led.off()
+
+    time.sleep(5)
+
     flickering = FlickeringLight(
-        led=gpiozero.LED(10)
+        led=led
     )
     
     flickering.start()
