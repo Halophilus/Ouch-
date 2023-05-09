@@ -170,10 +170,7 @@ class Script:
             return self.restart()
 
         player.skip_to_start(segment_name='button_1')
-        player.loop_segment_later(
-            segment_name='button_1',
-            interrupt_check = lambda: self._restart
-        )
+        player.loop_segment_later(segment_name='button_1')
 
         print("WAITING FOR BLACK BUTTON RELEASE")
         if self.wait_for_release(black_button.wait_for_release) == poll_result.PollResult.SHOULD_RESTART:
@@ -181,10 +178,7 @@ class Script:
         black_button.when_pressed = defaultButtonPress
 
         player.skip_to_start(segment_name='sequence_2')
-        player.loop_segment_later(
-            segment_name='transition_2',
-            interrupt_check = lambda: self._restart
-        )
+        player.loop_segment_later(segment_name='transition_2')
 
         print("WAITING FOR TRANSITION 2")
         player.wait_for_segment_to_be_reached(
