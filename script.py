@@ -78,10 +78,10 @@ front_fan = gpiozero.PWMOutputDevice(12)
 rear_fan = gpiozero.PWMOutputDevice(13)
 
 # Buttons with internal pull-up resistors and debounce-like behavior
-black_button = gpiozero.Button(8, pull_up=True, hold_time=0.3, bounce_time=0.2)
-yellow_button = gpiozero.Button(1, pull_up=True, hold_time=0.3, bounce_time=0.2)
-red_button = gpiozero.Button(7, pull_up=True, hold_time=0.3, bounce_time=0.2)
-key_button = gpiozero.Button(25, pull_up=True, hold_time=0.3, bounce_time=0.2, hold_repeat=True)
+black_button = gpiozero.Button(8, pull_up=True, hold_time=0.3, bounce_time=0.5)
+yellow_button = gpiozero.Button(1, pull_up=True, hold_time=0.3, bounce_time=0.5)
+red_button = gpiozero.Button(7, pull_up=True, hold_time=0.3, bounce_time=0.5)
+key_button = gpiozero.Button(25, pull_up=True, hold_time=0.3, bounce_time=0.5, hold_repeat=True)
 
 # Distance sensor
 distance_sensor = gpiozero.DistanceSensor(echo=20, trigger=21)
@@ -154,8 +154,7 @@ class Script:
         monitor.on()
 
         print("WAITING FOR KEY BUTTON")
-        if self.wait_for_press(key_button) == poll_result.PollResult.SHOULD_RESTART:
-            return self.restart()
+        key_button.wait_for_press()
 
         player.skip_to_start(segment_name='sequence_1')
         player.loop_segment_later(segment_name='transition_1')
