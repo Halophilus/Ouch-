@@ -32,6 +32,7 @@ class FlickeringLight:
             target = self._activity, 
             daemon = True
         )
+        self._thread.start()
     
     def stop(self):
         self._kill = True
