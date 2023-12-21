@@ -85,7 +85,10 @@ Many of the hardware components here were harvested from existing electronics, s
 | Decorative cables | Misc. | These can be attached to the back of the PC which serve no practical purpose other than appearance. In this project, cables were scorched and scoured to look like they've gone through a war. Be careful when doing this if this step is included. | x |
 | Breadboard | Prototyping pinhole breadboard | This is useful for prototyping, but became an embedded part of the project that made altering or adding circuity much easier | 2 |
 | Adapters | Right-angle / pivot USB and HDMI adapters | There is a certain economy of space that is required for designing a project like this. While the original goal was to minimize USB peripherals, debugging demands the use of a mouse and keyboard, especially when working over networks where SSH is blocked. These will make it easier to route the necessary USB cables around existing peripherals | 4-5 |
-
+| Silicone adhesive | Vibration-resistant electronic insulating adhesive | When fixing wires that were meant to flex in place, rigid adhesives will work against you. A flexible, insulating adhesive kept fragile fixtures in place, and even allowed me to fix items in the breadboard | 2 |
+| Hot glue | High strength/temperature hot glue gun | Sometimes a rigid fixative is necessary, especially when adding in the 3D printed components | Countless sticks, 1 gun |
+| Heatshrink tubing | Ideally marine heatshrink with inbuilt adhesives | For a project with this many wires, it would be reckless to rely on electrical tape. | Large set |
+| Resistors | A variety pack of different impedance resistors | All of the circuits here are RC, and only some have capacitance: a great variety of resistors is needed | One set |
 
 ## Under the Hood
 Most of the hardware was contained within the IBM 2011 chassis. Below is an image of the inside of that chassis with notable peripherals highlighted and colorized. Only the largest components from each category were numbered, but all components from each category are given the same color. 
