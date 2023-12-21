@@ -2,7 +2,7 @@
 
 ## Introduction
 ![Project Overview](/Documentation/images/title.png)
-This is an overview of the software section of this project. To see the hardware specifications, visit the [Hardware Summary Page](/Documentation/hardware_summary.md)
+This is an overview of the software section of this project. To see the hardware specifications, visit the [Hardware Summary Page](/hardware_summary.md)
 
 ## Table of Contents
 1. [Introduction](#introduction)

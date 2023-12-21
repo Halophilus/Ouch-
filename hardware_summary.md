@@ -401,7 +401,7 @@ I've given enough material here for anyone to more-or-less be able to replicate 
 A machine terminal simulacrum can be used to display all manner of media beyond an interactive film. The hardware elements in here could be tied into any variety of user-facing interactive applications. 
 
 ## License
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE.txt) file for details.
 
 The GNU General Public License v3.0 is a free, copyleft license for software and other kinds of works, ensuring that all modified versions of the project are also free. This license guarantees your freedom to share and change all versions of a project to make sure it remains free software for all its users. For more information, please visit [GNU GPL v3.0's webpage](https://www.gnu.org/licenses/gpl-3.0.html).
 
