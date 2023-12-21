@@ -14,7 +14,7 @@ READ CAREFULLY BEFORE PROCEEDING
 
 🔴 Safety Precautions: Always adhere to safety guidelines and local electrical codes. Use appropriate personal protective equipment (PPE). Ensure all power is switched off and unplugged before working on any electrical component. Double-check connections and use appropriate insulation and grounding techniques.
 
-🔴 Seek Professional Assistance: We strongly recommend consulting with or hiring a qualified electrician or electrical engineer to supervise, review, or conduct any work involving AC electricity.
+🔴 Seek Professional Assistance: I strongly recommend consulting with or hiring a qualified electrician or electrical engineer to supervise, review, or conduct any work involving AC electricity.
 
 🔴 Testing and Inspection: Have all electrical setups inspected by a professional for safety compliance before use.
 
