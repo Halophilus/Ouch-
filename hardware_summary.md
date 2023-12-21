@@ -84,7 +84,9 @@ Many of the hardware components here were harvested from existing electronics, s
 | Wire | 16awg speaker wire, 22awg solid-core wire, 12awg copper wire | The speaker wire is surprisingly brittle so position it where it will be bent the least. The solid-core wire is flexible and reusable but be sure to measure it carefully before cutting lengths of it, as excessive strain can pull it loose from contacts in breadboard and other circuits (get a set with several colors to differentiate different circuit paths), the solid copper wire is great for high current applications, but is not shielded and should be utilized conservatively. | 3 |
 | Decorative cables | Misc. | These can be attached to the back of the PC which serve no practical purpose other than appearance. In this project, cables were scorched and scoured to look like they've gone through a war. Be careful when doing this if this step is included. | x |
 | Breadboard | Prototyping pinhole breadboard | This is useful for prototyping, but became an embedded part of the project that made altering or adding circuity much easier | 2 |
- 
+| Adapters | Right-angle / pivot USB and HDMI adapters | There is a certain economy of space that is required for designing a project like this. While the original goal was to minimize USB peripherals, debugging demands the use of a mouse and keyboard, especially when working over networks where SSH is blocked. These will make it easier to route the necessary USB cables around existing peripherals | 4-5 |
+
+
 ## Under the Hood
 Most of the hardware was contained within the IBM 2011 chassis. Below is an image of the inside of that chassis with notable peripherals highlighted and colorized. Only the largest components from each category were numbered, but all components from each category are given the same color. 
 ![Colorized component map](/Documentation/images/under-the-hood.png)
