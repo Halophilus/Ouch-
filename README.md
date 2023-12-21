@@ -135,19 +135,19 @@ pip install python-mpv-jsonipc gpiozero
 
 ## Image Gallery
 
-![First button press sequence](/Documentation/images/readme/1.jpeg)
+![First button press sequence](/Documentation/images/readme/1.png)
 
-![Reverse I/O panel](/Documentation/images/readme/2.jpeg)
+![Reverse I/O panel](/Documentation/images/readme/2.png)
 
-![Photoshoot](/Documentation/images/readme/3.jpeg)
+![Photoshoot](/Documentation/images/readme/3.png)
 
-![Ham radio headset](/Documentation/images/readme/4.jpeg)
+![Ham radio headset](/Documentation/images/readme/4.png)
 
-![Second sequence](/Documentation/images/readme/5.jpeg)
+![Second sequence](/Documentation/images/readme/5.png)
 
-![Third sequence](/Documentation/images/readme/6.jpeg)
+![Third sequence](/Documentation/images/readme/6.png)
 
-![Shutdown](/Documentation/images/readme/7.jpeg)
+![Shutdown](/Documentation/images/readme/7.png)
 
 ## License
 
