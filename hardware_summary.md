@@ -183,6 +183,7 @@ In operation, the supercapacitors charge when SW1 is closed. Once fully charged,
 These are the individual components involved in the fog machine. Originally, there was another circuit that discharged the capacitors only when the PSU was off and a discharge signal was being sent from the RPi. Later versions used the ULN2803.
 
 ![Atomizer support](/Documentation/images/fog-machine/atomizer.png)
+
 This elevates the heating element away from wires and the base of the case where a short could occur (Atomizer Mount v1.STL). This also elevates the heating element so that generated fog is more readily carried by the fan current within the case.
 
 ![MOSFET Castle](/Documentation/images/fog-machine/castle.png)
