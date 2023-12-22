@@ -131,7 +131,8 @@ This circuit utilizes a ULN2803 Darlington transistor array to control a motor u
 - **Power Supply Unit (PSU):**
     - The 12V PSU rail is used to provide the necessary voltage and current for the motor. This is separate from the logic level voltages provided by the microcontroller.
 
-![Fan control components](/Documentation/images/pwm-fan-control/implements.png)
+
+![Fan control components](/Documentation/images/pwm-fan-control/Implements.png)
 
 The exhaust fan on the front of the case had a custom vent hood 3D printed for it so that all of the exhaust is exiting the case (50mm fan vent v1.STL). This feature plays into the functionality of the fog machine.
 
