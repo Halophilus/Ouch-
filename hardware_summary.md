@@ -197,7 +197,9 @@ What the MOSFET castle looks like fully installed. The red and black wires corre
 ---
 ### Power Supply
 The power supply is a modified SSF power supply in a custom housing that allows it to fit within the IBM 2011 and accommodate the supercaps in the fog machine circuit (PSU_Chassis.STL, PSU_Lid.STL)
+
 ![PSU Chassis](/Documentation/images/psu/model.png)
+
 - There are five posts for five ATX rails (12V, 5V, 3.3V, 5VSB, GND).
 - There are two holes on the bottom left of the PSU housing to accommodate wires for the power management circuit and the SSR.
 - The back has a hole for an exit cable to power the CRT monitor.
@@ -209,6 +211,7 @@ The power supply is a modified SSF power supply in a custom housing that allows 
 - This is a dangerous high AC voltage aspect to the project and not altogether necessary. An external PSU can supply all of these things and be isolated.
 
 ![PSU Chassis 2](/Documentation/images/psu/model2.png)
+
 ![Early installation for PSU](/Documentation/images/psu/installation.png)
 
 ---
@@ -217,6 +220,7 @@ The power supply is a modified SSF power supply in a custom housing that allows 
 The audio output from the Raspberry Pi (RPi) is amplified using an LM386 op-amp board to drive a high-impedance HAM radio headset.
 
 ![LM386 Circuit Design courtesy of Marlin P. Jones & Assoc, Inc](/Documentation/images/audio/circuit.png)
+
 note: The above circuit diagram was provided courtsey of Marlin P. Jones & Assoc, Inc, the manufacturers of the board used in this project. This is NOT an original circuit design.
 - **LM386 Op-Amp Board:**
     - The board is built around the LM386 audio amplifier chip, which is known for its low voltage operation and ability to drive headphones and small speakers.
@@ -244,6 +248,7 @@ note: The above circuit diagram was provided courtsey of Marlin P. Jones & Assoc
 
 ### Video Output Circuit
 To facilitate a connection between the Raspberry Pi (RPi) and an older CRT monitor that accepts a DB9 VGA input, an adapter chain is used to convert the RPi's HDMI output to a VGA signal, and then adapt that VGA signal from a DB15 connector to a DB9 connector. Here's a technical description of this process, with a focus on the pin mapping from DB15 to DB9 for video signals:
+
 ![VGA Patch Detail](/Documentation/images/video/detail.png)
 
 - **HDMI to VGA Conversion:**
@@ -276,13 +281,16 @@ To facilitate a connection between the Raspberry Pi (RPi) and an older CRT monit
     - The power to the CRT is controlled by the previously described power circuit, allowing the RPi to turn the monitor on or off as needed.
 
 The DB9-out visible on the outside of the IBM 2011 was made flush with the existing I/O panel on the back. In order to support the DB9 board, staging was 3D printed to hold it up (VGA Stage v4.STL).
+
 ![Other angle of patch circuit](/Documentation/images/video/detail3.png)
+
 ![DB9 Support Staging](/Documentation/images/video/stage.png)
 
 ---
 
 ### Power Management Circuit
 The RPi needs to manage power for a CRT monitor and an ATX Power Supply Unit (PSU) and controlling it using a Solid State Relay (SSR) and simple transistors.
+
 ![Power management circuit design](/Documentation/images/power/circuit.png)
 
 - **RPi GPIO and ATX PSU Control:**
@@ -306,10 +314,13 @@ The RPi needs to manage power for a CRT monitor and an ATX Power Supply Unit (PS
 In practice, the RPi can run scripts or programs that determine when the CRT should be powered on or off, possibly based on user input, a preset schedule, or sensor data. The use of solid-state switching and safety components ensures reliability and safety in operation, while the inclusion of fuses provides an essential layer of overcurrent protection.
 
 The power management circuit started with an unsheathed PSU, an SSR, a transistor and a series of wires
+
 ![Power Circuit Components](/Documentation/images/power/components.png)
 
 Because the SSR is controlling a high voltage, the entire apparatus needs to be heavily shielded. A sheath for the SSR was printed, isolating the contacts from any conductors (SSR Stage v6.STL). Sheathed leads eliminate the possibility of a short circuit.
+
 ![SSR Stage](/Documentation/images/power/stage.png)
+
 ![SSR](/Documentation/images/power/ssr.png)
 
 - An aluminum heatsink was added to the SSR to dissipate heat associated with high voltage switching. 
@@ -327,6 +338,7 @@ The IBM 2011 was not accommodating enough for all of the features that needed to
 The CRT hardware originally arrived without a chassis, so a 3D model was generated that could present the monitor in the style of a machine terminal.
 
 ![CRT Housing Model](/Documentation/images/crt/model.png)
+
 - The model was designed in three parts, bespoke for the dimensions of the Sony hardware.
     - The outer shell, forming the frame around the front screen and covering the length of the monitor (Monitor_Front.STL).
     - The back plate, which has an access port in the bottom for cables that can be attached to the back of the hardware (Monitor_Back.STL).
@@ -338,7 +350,8 @@ The CRT hardware originally arrived without a chassis, so a 3D model was generat
 
 ### Indicator LEDs
 
-To fully encapsulate the PC experience, power and randomly flickering activity lights were placed on the front panel of the IBM 2011
+To fully encapsulate the PC experience, power and randomly flickering activity lights were placed on the front panel of the IBM 2011.
+
 ![Front panel](/Documentation/images/led/panel.png)
 
 - **Activity light**, left
@@ -358,6 +371,7 @@ To fully encapsulate the PC experience, power and randomly flickering activity l
 ### HDD Noise
 
 Seeking and tracking sounds associated with hard drive activity were also a must for this retro computer experience.
+
 ![HDD and cables](/Documentation/images/hdd/hdd.png)
 
 - Originally, the plan was to trigger seeking sounds using low-level IOCTL commands.
@@ -371,6 +385,7 @@ Seeking and tracking sounds associated with hard drive activity were also a must
 ### Proximity Sensor
 
 One of the most engaging aspects of this installation was the instant activation upon approach. This was accomplished with an HC-SR04 module mounted to the front of the monitor casing. When an object is detected within a certain threshold, it initiates the wakeup protocol and waits for a key turn on the button panel.
+
 ![Front-facing proximity sensor](/Documentation/images/prox/prox.png)
 
 - A voltage divider was used to pull down the return voltage from the module to the logic level of the RPi (~3.3V)
@@ -380,6 +395,7 @@ One of the most engaging aspects of this installation was the instant activation
 ### Button Control Station 
     
 A button interface is necessary for user interaction. I used an industrial-looking button control station which has three buttons and a turnkey throw.
+
 ![NEMA3R Button Interface](/Documentation/images/button/closed.png)
 
 - Upon initial startup, the device becomes primed to start the first sequence.
